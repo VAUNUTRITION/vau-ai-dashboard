@@ -498,18 +498,57 @@ function ProjectCard({ p, onUpdate, tab, allProjects }) {
                 <ItemRow key={i} item={sk} statusOpts={SK_STATUS} isSkill={true} onUpdate={v=>upSk(i,v)} onDelete={()=>delSk(i)} sharedIn={getSharedCount(sk.name,"skill")} />
               ))}
               {addSk ? (
-                <div style={{ display:"flex", flexWrap:"wrap", gap:6, marginTop:8, padding:"8px 10px", borderRadius:10, background:"rgba(30,26,52,0.03)", border:"1px solid rgba(30,26,52,0.06)" }}>
-                  <input value={nSk.name} onChange={e=>setNSk(d=>({...d,name:e.target.value}))} placeholder="Nombre skill" style={{...inputStyle, width:170}} />
-                  <select value={nSk.color} onChange={e=>setNSk(d=>({...d,color:e.target.value}))} style={inputStyle}>
-                    {Object.keys(SK_COLORS).map(c=><option key={c} value={c}>{c}</option>)}
-                  </select>
-                  <select value={nSk.status} onChange={e=>setNSk(d=>({...d,status:e.target.value}))} style={inputStyle}>
-                    {SK_STATUS.map(s=><option key={s} value={s}>{s}</option>)}
-                  </select>
-                  <input value={nSk.owner} onChange={e=>setNSk(d=>({...d,owner:e.target.value}))} placeholder="Owner" style={{...inputStyle, width:80}} />
-                  <input value={nSk.drive} onChange={e=>setNSk(d=>({...d,drive:e.target.value}))} placeholder="Link" style={{...inputStyle, width:140}} />
-                  <button onClick={()=>{ if(!nSk.name.trim())return; const sk=p.skills.filter(s=>s.name!=="skills a definir"); onUpdate({...p,skills:[...sk,{...nSk}]}); setNSk({name:"",color:"gray",status:"❌ Por crear",owner:"",drive:""}); setAddSk(false); }} style={{ fontSize:11, padding:"4px 12px", background:"var(--soul-purple)", color:"var(--root-cream)", border:"none", borderRadius:8 }}>Añadir</button>
-                  <button onClick={()=>setAddSk(false)} style={{ fontSize:11, padding:"4px 12px" }}>Cancelar</button>
+                <div style={{ display:"flex", flexDirection:"column", gap:8, marginTop:8, padding:"10px 12px", borderRadius:10, background:"rgba(30,26,52,0.03)", border:"1px solid rgba(30,26,52,0.06)" }}>
+                  {/* Picker: existing skills from other projects */}
+                  {(() => {
+                    const currentNames = new Set(p.skills.map(s => s.name.trim()));
+                    const existing = [];
+                    const seen = new Set();
+                    (allProjects||[]).forEach(proj => {
+                      if (proj.id === p.id) return;
+                      proj.skills.forEach(s => {
+                        const n = s.name.trim();
+                        if (n === "skills a definir" || currentNames.has(n) || seen.has(n)) return;
+                        seen.add(n);
+                        existing.push(s);
+                      });
+                    });
+                    if (existing.length === 0) return null;
+                    return (
+                      <div>
+                        <div style={{ fontSize:10, color:"var(--balance-purple)", marginBottom:4, opacity:0.7 }}>Agregar skill existente de otro proyecto:</div>
+                        <div style={{ display:"flex", flexWrap:"wrap", gap:4 }}>
+                          {existing.map((s,i) => {
+                            const sc = SK_COLORS[s.color] || SK_COLORS.gray;
+                            return (
+                              <button key={i} onClick={() => {
+                                const sk = p.skills.filter(x => x.name !== "skills a definir");
+                                onUpdate({...p, skills:[...sk, {...s}]});
+                                setAddSk(false);
+                                showToast("Skill '" + s.name + "' agregada (compartida)");
+                              }} style={{ fontSize:10, padding:"4px 10px", borderRadius:14, background:sc.bg, color:sc.text, border:sc.dashed?"1.5px dashed rgba(30,26,52,0.2)":"1px solid rgba(30,26,52,0.08)", cursor:"pointer", fontWeight:500 }}>
+                                {s.name} <span style={{opacity:0.5, fontSize:9}}>({s.status})</span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                        <div style={{ fontSize:10, color:"var(--balance-purple)", margin:"8px 0 4px", opacity:0.7 }}>O crear una nueva:</div>
+                      </div>
+                    );
+                  })()}
+                  <div style={{ display:"flex", flexWrap:"wrap", gap:6 }}>
+                    <input value={nSk.name} onChange={e=>setNSk(d=>({...d,name:e.target.value}))} placeholder="Nombre skill" style={{...inputStyle, width:170}} />
+                    <select value={nSk.color} onChange={e=>setNSk(d=>({...d,color:e.target.value}))} style={inputStyle}>
+                      {Object.keys(SK_COLORS).map(c=><option key={c} value={c}>{c}</option>)}
+                    </select>
+                    <select value={nSk.status} onChange={e=>setNSk(d=>({...d,status:e.target.value}))} style={inputStyle}>
+                      {SK_STATUS.map(s=><option key={s} value={s}>{s}</option>)}
+                    </select>
+                    <input value={nSk.owner} onChange={e=>setNSk(d=>({...d,owner:e.target.value}))} placeholder="Owner" style={{...inputStyle, width:80}} />
+                    <input value={nSk.drive} onChange={e=>setNSk(d=>({...d,drive:e.target.value}))} placeholder="Link" style={{...inputStyle, width:140}} />
+                    <button onClick={()=>{ if(!nSk.name.trim())return; const sk=p.skills.filter(s=>s.name!=="skills a definir"); onUpdate({...p,skills:[...sk,{...nSk}]}); setNSk({name:"",color:"gray",status:"❌ Por crear",owner:"",drive:""}); setAddSk(false); }} style={{ fontSize:11, padding:"4px 12px", background:"var(--soul-purple)", color:"var(--root-cream)", border:"none", borderRadius:8 }}>Añadir nueva</button>
+                    <button onClick={()=>setAddSk(false)} style={{ fontSize:11, padding:"4px 12px" }}>Cancelar</button>
+                  </div>
                 </div>
               ) : <button onClick={()=>setAddSk(true)} style={{ fontSize:11, marginTop:8, padding:"5px 14px", borderRadius:8 }}>+ Añadir skill</button>}
             </>
@@ -523,16 +562,54 @@ function ProjectCard({ p, onUpdate, tab, allProjects }) {
                 <ItemRow key={i} item={kb} statusOpts={KB_STATUS} isSkill={false} onUpdate={v=>upKb(i,v)} onDelete={()=>delKb(i)} sharedIn={getSharedCount(kb.name,"kb")} />
               ))}
               {addKb ? (
-                <div style={{ display:"flex", flexWrap:"wrap", gap:6, marginTop:8, padding:"8px 10px", borderRadius:10, background:"rgba(30,26,52,0.03)", border:"1px solid rgba(30,26,52,0.06)" }}>
-                  <input value={nKb.name} onChange={e=>setNKb(d=>({...d,name:e.target.value}))} placeholder="Nombre KB" style={{...inputStyle, width:180}} />
-                  <select value={nKb.status} onChange={e=>setNKb(d=>({...d,status:e.target.value}))} style={inputStyle}>
-                    {KB_STATUS.map(s=><option key={s} value={s}>{s}</option>)}
-                  </select>
-                  <input value={nKb.owner} onChange={e=>setNKb(d=>({...d,owner:e.target.value}))} placeholder="Owner" style={{...inputStyle, width:80}} />
-                  <input value={nKb.drive} onChange={e=>setNKb(d=>({...d,drive:e.target.value}))} placeholder="Link" style={{...inputStyle, width:140}} />
-                  <input value={nKb.notes} onChange={e=>setNKb(d=>({...d,notes:e.target.value}))} placeholder="Notas" style={{...inputStyle, width:200}} />
-                  <button onClick={()=>{ if(!nKb.name.trim())return; onUpdate({...p,kb:[...p.kb,{...nKb}]}); setNKb({name:"",status:"❌ Por crear",owner:"",drive:"",notes:""}); setAddKb(false); }} style={{ fontSize:11, padding:"4px 12px", background:"var(--soul-purple)", color:"var(--root-cream)", border:"none", borderRadius:8 }}>Añadir</button>
-                  <button onClick={()=>setAddKb(false)} style={{ fontSize:11, padding:"4px 12px" }}>Cancelar</button>
+                <div style={{ display:"flex", flexDirection:"column", gap:8, marginTop:8, padding:"10px 12px", borderRadius:10, background:"rgba(30,26,52,0.03)", border:"1px solid rgba(30,26,52,0.06)" }}>
+                  {/* Picker: existing KB files from other projects */}
+                  {(() => {
+                    const currentNames = new Set(p.kb.map(k => k.name.trim()));
+                    const existing = [];
+                    const seen = new Set();
+                    (allProjects||[]).forEach(proj => {
+                      if (proj.id === p.id) return;
+                      proj.kb.forEach(k => {
+                        const n = k.name.trim();
+                        if (currentNames.has(n) || seen.has(n)) return;
+                        seen.add(n);
+                        existing.push(k);
+                      });
+                    });
+                    if (existing.length === 0) return null;
+                    return (
+                      <div>
+                        <div style={{ fontSize:10, color:"var(--balance-purple)", marginBottom:4, opacity:0.7 }}>Agregar KB file existente de otro proyecto:</div>
+                        <div style={{ display:"flex", flexWrap:"wrap", gap:4 }}>
+                          {existing.map((k,i) => {
+                            const stc = ST[k.status] || ST["a definir"];
+                            return (
+                              <button key={i} onClick={() => {
+                                onUpdate({...p, kb:[...p.kb, {...k}]});
+                                setAddKb(false);
+                                showToast("KB '" + k.name + "' agregado (compartido)");
+                              }} style={{ fontSize:10, padding:"4px 10px", borderRadius:14, background:"rgba(68,114,93,0.1)", color:"#44725d", border:"1px solid rgba(30,26,52,0.08)", cursor:"pointer", fontWeight:500 }}>
+                                {k.name} <span style={{opacity:0.5, fontSize:9}}>({k.status})</span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                        <div style={{ fontSize:10, color:"var(--balance-purple)", margin:"8px 0 4px", opacity:0.7 }}>O crear uno nuevo:</div>
+                      </div>
+                    );
+                  })()}
+                  <div style={{ display:"flex", flexWrap:"wrap", gap:6 }}>
+                    <input value={nKb.name} onChange={e=>setNKb(d=>({...d,name:e.target.value}))} placeholder="Nombre KB" style={{...inputStyle, width:180}} />
+                    <select value={nKb.status} onChange={e=>setNKb(d=>({...d,status:e.target.value}))} style={inputStyle}>
+                      {KB_STATUS.map(s=><option key={s} value={s}>{s}</option>)}
+                    </select>
+                    <input value={nKb.owner} onChange={e=>setNKb(d=>({...d,owner:e.target.value}))} placeholder="Owner" style={{...inputStyle, width:80}} />
+                    <input value={nKb.drive} onChange={e=>setNKb(d=>({...d,drive:e.target.value}))} placeholder="Link" style={{...inputStyle, width:140}} />
+                    <input value={nKb.notes} onChange={e=>setNKb(d=>({...d,notes:e.target.value}))} placeholder="Notas" style={{...inputStyle, width:200}} />
+                    <button onClick={()=>{ if(!nKb.name.trim())return; onUpdate({...p,kb:[...p.kb,{...nKb}]}); setNKb({name:"",status:"❌ Por crear",owner:"",drive:"",notes:""}); setAddKb(false); }} style={{ fontSize:11, padding:"4px 12px", background:"var(--soul-purple)", color:"var(--root-cream)", border:"none", borderRadius:8 }}>Añadir nuevo</button>
+                    <button onClick={()=>setAddKb(false)} style={{ fontSize:11, padding:"4px 12px" }}>Cancelar</button>
+                  </div>
                 </div>
               ) : <button onClick={()=>setAddKb(true)} style={{ fontSize:11, marginTop:8, padding:"5px 14px", borderRadius:8 }}>+ Añadir KB file</button>}
             </>
