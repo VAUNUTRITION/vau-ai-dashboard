@@ -245,6 +245,8 @@ const SK_COLORS = {
 
 const SK_STATUS = ["✅ Creada","🔄 Actualizar","❌ Por crear","⏳ Ola 2"];
 const KB_STATUS = ["✅ Actualizado","🔄 Actualizar","❌ Por crear"];
+const INS_STATUS = ["✅ Lista","🔄 Actualizar","❌ Por crear"];
+const mkI = (name, owner="", note="") => ({ name, status:"❌ Por crear", owner, drive:"", notes:note });
 const ST = {
   "✅ Creada":       { bg:"rgba(68,114,93,0.12)", text:"#44725d" },
   "✅ Actualizado":  { bg:"rgba(68,114,93,0.12)", text:"#44725d" },
@@ -263,78 +265,91 @@ const INIT = [
     mcp:"activo", driveLink:"",
     skills:[ mk("skills a definir","tbd") ],
     kb:[ mkK("Brand DNA Master File","Sofía","KB file .md — exportar de Área 1 Brand Core. CRÍTICO."), mkK("ICP resumido","Sofía","KB file .md — exportar de Área 1 Brand Core > ICP 360°."), mkK("OKRs Q2","Paola","KB file .md — exportar de Área 4 Strategy & Roadmap."), mkK("Super Biblia Chase (completa)","Sofía","KB file .md — exportar de Drive y subir al proyecto Claude.") ],
+    instructions:[ mkI("Project instructions","","Por definir.") ],
   },
   { id:2, cat:"CEREBRO", name:"2. Brand & Quality Standards", lock:true, owners:"Paola · Sofía · MP",
     areas:["1. Brand","2. Content","5. Compliance","3. Product","14. CRO"],
     mcp:"opcional", driveLink:"",
     skills:[ mk("skills a definir","tbd") ],
     kb:[ mkK("Brand DNA Master File","Sofía","CRÍTICO. 8-15K palabras."), mkK("Claims aprobados","Sofía","Fuente: Área 5 Compliance & Regulatory."), mkK("Lexicon (5 capas)","Sofía","Fuente: Área 1 Brand Core > VAU Lexicon Master."), mkK("Tone of Voice dual","Sofía","Fuente: Área 1 Brand Core > Tone of Voice."), mkK("ICP resumido","Sofía","Fuente: Área 1 Brand Core > ICP 360°.") ],
+    instructions:[ mkI("Project instructions","","Por definir.") ],
   },
   { id:3, cat:"REVENUE", name:"3. TikTok & E-Commerce", lock:false, owners:"Sofía · Daniela · Jorge",
     areas:["9. TikTok Shop","2. Content","7. Growth","14. CRO","8. Paid Media"],
     mcp:"activo", driveLink:"",
     skills:[ mk("vau-producto-script","shared","Sofía"), mk("vau-ugc-script","teal","Sofía"), mk("vau-caption-tiktok","shared","Sofía"), mk("vau-hook-generator","shared","Sofía"), mk("vau-ads-tiktok","teal","Jorge"), mk("vau-ads-tiktokshop","teal","Jorge"), mk("vau-ads-meta","teal","Jorge"), mk("vau-ads-retargeting","teal","Jorge"), mk("vau-web-pdp","teal","Jorge"), mk("vau-web-homepage","teal","Jorge"), mk("vau-web-popup","shared","Daniela") ],
     kb:[ mkK("Brand DNA Master File","Sofía","CRÍTICO."), mkK("Claims aprobados","Sofía","Fuente: Área 5."), mkK("ICP resumido","Sofía","Fuente: Área 1."), mkK("Fórmula VF1 + Refocus","Sofía","Fuente: Área 3 Product."), mkK("TikTok Shop strategy","Sofía","Fuente: Área 9."), mkK("Super Biblia Chase (completa)","Sofía","KB file .md.") ],
+    instructions:[ mkI("Project instructions","","Por definir.") ],
   },
   { id:4, cat:"REVENUE", name:"4. Email & Retention", lock:false, owners:"Daniela · Sofía",
     areas:["10. Email SMS","13. CX","2. Content","14. CRO"],
     mcp:"activo", driveLink:"",
     skills:[ mk("vau-email-welcome","coral","Daniela"), mk("vau-email-abandonment","coral","Daniela"), mk("vau-email-postpurchase","coral","Daniela"), mk("vau-email-newsletter","coral","Daniela"), mk("vau-email-conversion","coral","Daniela"), mk("vau-email-retention","coral","Daniela"), mk("vau-hook-generator","shared","Sofía"), mk("vau-web-faq","coral","Daniela"), mk("vau-web-popup","shared","Daniela"), mk("vau-web-seo","coral","Jorge") ],
     kb:[ mkK("Brand DNA Master File","Sofía","CRÍTICO."), mkK("Claims aprobados","Sofía","Fuente: Área 5."), mkK("ICP resumido","Sofía","Fuente: Área 1."), mkK("Fórmula VF1 + Refocus","Sofía","Fuente: Área 3."), mkK("Email flows & templates","Daniela","Fuente: Área 10."), mkK("Ecosistema Mktg v2 Chase — sec 5","Daniela","KB file .md."), mkK("Super Biblia Chase (completa)","Sofía","KB file .md.") ],
+    instructions:[ mkI("Project instructions","","Por definir.") ],
   },
   { id:5, cat:"REVENUE", name:"5. Performance Marketing", lock:false, owners:"Jorge · Sofía",
     areas:["8. Paid Media","15. Data","7. Growth","14. CRO","12. Finance"],
     mcp:"opcional", driveLink:"",
     skills:[ mk("vau-ads-meta","amber","Jorge"), mk("vau-ads-tiktok","amber","Jorge"), mk("vau-ads-retargeting","amber","Jorge"), mk("vau-hook-generator","shared","Sofía"), mk("vau-web-pdp","amber","Jorge") ],
     kb:[ mkK("Brand DNA Master File","Sofía","CRÍTICO."), mkK("Claims aprobados","Sofía","Fuente: Área 5."), mkK("ICP resumido","Sofía","Fuente: Área 1."), mkK("Ecosistema Mktg v2 Chase","Jorge","KB file .md."), mkK("Creative Playbook Chase","Jorge","KB file .md."), mkK("Super Biblia Chase (completa)","Jorge","KB file .md.") ],
+    instructions:[ mkI("Project instructions","","Por definir.") ],
   },
   { id:6, cat:"EJECUCIÓN", name:"6. Brand & Content", lock:false, owners:"Sofía · Daniela · MP",
     areas:["1. Brand","2. Content","3. Product","5. Compliance"],
     mcp:"opcional", driveLink:"",
     skills:[ mk("vau-brand-script","purple","Sofía"), mk("vau-ciencia-script","purple","Sofía"), mk("vau-producto-script","shared","Sofía"), mk("vau-founder-script","purple","Paola"), mk("vau-brand-carrusel","purple","Sofía"), mk("vau-ciencia-carrusel","purple","Sofía"), mk("vau-producto-carrusel","purple","Sofía"), mk("vau-founder-carrusel","purple","Paola"), mk("vau-hook-generator","shared","Sofía"), mk("vau-caption-instagram","purple","Sofía"), mk("vau-caption-linkedin","purple","Sofía"), mk("vau-caption-tiktok","shared","Sofía"), mk("vau-brand-checker","purple","MP"), mk("vau-visual-brief","purple","MP"), mk("vau-moodboard","purple","MP"), {...mk("vau-product-still","purple","MP"), status:"⏳ Ola 2"}, {...mk("vau-lifestyle-ritual","purple","MP"), status:"⏳ Ola 2"}, {...mk("vau-science-visual","purple","MP"), status:"⏳ Ola 2"}, {...mk("vau-compose-feed","purple","MP"), status:"⏳ Ola 2"}, {...mk("vau-ad-static","purple","MP"), status:"⏳ Ola 2"} ],
     kb:[ mkK("Brand DNA Master File","Sofía","CRÍTICO. 8-15K palabras."), mkK("Voice DNA Paola","Sofía","Fuente: Área 1."), mkK("Lexicon (5 capas)","Sofía","Fuente: Área 1."), mkK("Tone of Voice dual","Sofía","Fuente: Área 1."), mkK("ICP resumido","Sofía","Fuente: Área 1."), mkK("Funnel Map + Hook System","Sofía","Fuente: Área 1."), mkK("Creative Playbook Chase","Sofía","KB file .md."), mkK("Super Biblia Chase (completa)","Sofía","KB file .md."), mkK("Content Guide","Sofía","Fuente: Área 2.") ],
+    instructions:[ mkI("Project instructions","","Por definir.") ],
   },
   { id:7, cat:"EJECUCIÓN", name:"7. Compliance & Regulatory", lock:true, owners:"Jorge · Paola",
     areas:["5. Compliance","3. Product","14. CRO","11. Ops"],
     mcp:"activo", driveLink:"",
     skills:[ mk("skills a definir","tbd") ],
     kb:[ mkK("Claims aprobados","Sofía","Fuente: Área 5."), mkK("Fórmula VF1 + Refocus","Sofía","Fuente: Área 3."), mkK("ICP resumido","Sofía","Fuente: Área 1."), mkK("FDA/DSHEA framework","Jorge","Fuente: Área 5."), mkK("Amazon ToS + TikTok compliance","Jorge","Fuente: Área 5."), mkK("FTC rules","Jorge","Fuente: Área 5.") ],
+    instructions:[ mkI("Project instructions","","Por definir.") ],
   },
   { id:8, cat:"EJECUCIÓN", name:"8. Product & Formulation", lock:false, owners:"Paola · Jorge · Sofía",
     areas:["3. Product","5. Compliance","1. Brand","12. Finance"],
     mcp:"opcional", driveLink:"",
     skills:[ mk("vau-claim-validator","teal","Jorge"), mk("vau-ingredient-brief","teal","Sofía"), mk("vau-label-copy","teal","Sofía"), mk("vau-product-brief","teal","Paola"), mk("vau-science-explainer","teal","Sofía"), mk("vau-coa-summary","teal","Jorge") ],
     kb:[ mkK("Fórmula VF1 + Refocus","Sofía","Fuente: Área 3."), mkK("Claims aprobados","Sofía","Fuente: Área 5."), mkK("Brand DNA Master File","Sofía","Fuente: Área 1."), mkK("Label anatomy REST FIRST","Jorge","Fuente: Área 3."), mkK("FDA/DSHEA + FTC rules","Jorge","Fuente: Área 5.") ],
+    instructions:[ mkI("Project instructions","","Por definir.") ],
   },
   { id:9, cat:"OPERACIONES", name:"9. Operations Hub", lock:true, owners:"Jorge · Paola",
     areas:["11. Ops","12. Finance","5. Compliance","6. People","7. Growth"],
     mcp:"activo", driveLink:"",
     skills:[ mk("vau-sop-writer","gray","Jorge"), mk("vau-vendor-brief","gray","Jorge"), mk("vau-inventory-alert","gray","Jorge"), mk("vau-unit-economics","gray","Jorge"), mk("vau-cashflow-snapshot","gray","Jorge") ],
     kb:[ mkK("SOPs Fulfillment & 3PL","Jorge","Fuente: Área 11."), mkK("P&L template + Unit Economics","Jorge","Fuente: Área 12."), mkK("CRO checklists Chase","Jorge","KB file .md."), mkK("ICP resumido","Sofía","Fuente: Área 1."), mkK("Providers & Contracts","Jorge","Fuente: Área 11.") ],
+    instructions:[ mkI("Project instructions","","Por definir.") ],
   },
   { id:10, cat:"OPERACIONES", name:"10. Strategy & Growth", lock:false, owners:"Sofía · Paola",
     areas:["4. Strategy","7. Growth","12. Finance","15. Data","3. Product"],
     mcp:"activo", driveLink:"",
     skills:[ mk("skills a definir","tbd") ],
     kb:[ mkK("ICP resumido","Sofía","Fuente: Área 1."), mkK("OKRs Q2","Paola","Fuente: Área 4."), mkK("Super Biblia Chase (completa)","Sofía","KB file .md.") ],
+    instructions:[ mkI("Project instructions","","Por definir.") ],
   },
   { id:11, cat:"ESCALA", name:"11. Market & Consumer Intelligence", lock:false, owners:"Sofía · Jorge · Paola",
     areas:["3. Product","4. Strategy","7. Growth","15. Data","9. TikTok Shop"],
     mcp:"opcional", driveLink:"",
     skills:[ mk("skills a definir","tbd") ],
     kb:[ mkK("ICP resumido","Sofía","Fuente: Área 1."), mkK("Benchmark & Brand References","Sofía","Fuente: Área 1."), mkK("Competitor list","Sofía","Fuente: Área 4.") ],
+    instructions:[ mkI("Project instructions","","Por definir.") ],
   },
   { id:12, cat:"ESCALA", name:"12. Automations & Systems", lock:false, owners:"Jorge · Sofía",
     areas:["16. Tech","11. Ops","12. Finance","15. Data","10. Email SMS"],
     mcp:"opcional", driveLink:"",
     skills:[ mk("vau-script-builder","blue","Jorge"), mk("vau-zapier-flow","blue","Jorge"), mk("vau-dashboard-spec","blue","Jorge"), mk("vau-kpi-report","blue","Jorge"), mk("vau-attribution-analysis","blue","Jorge"), mk("vau-notion-sync-spec","blue","Sofía") ],
     kb:[ mkK("Arquitectura AI-First","Sofía","Fuente: Área 16."), mkK("Tech stack doc","Jorge","Fuente: Área 16."), mkK("CLAUDE.md","Sofía","Fuente: GitHub repo."), mkK("Integration guides","Jorge","Fuente: Área 16.") ],
+    instructions:[ mkI("Project instructions","","Por definir.") ],
   },
   { id:13, cat:"INFRAESTRUCTURA", name:"13. AI Studio & Systems", lock:false, owners:"Equipo completo",
     areas:["16. Tech","4. Strategy","6. People","15. Data","Todas"],
     mcp:"activo", driveLink:"",
     skills:[ mk("Construye todas las skills","gray","Sofía"), mk("Mantiene instrucciones","gray","Sofía"), mk("Actualiza KB files (48h)","gray","Sofía") ],
     kb:[ mkK("Registro de Proyectos Claude","Sofía","Fuente: Área 16."), mkK("Protocolo de construcción de skills","Sofía","Fuente: Área 16."), mkK("Arquitectura AI-First","Sofía","Fuente: Área 16."), mkK("Fase 2 — Anatomía del proyecto perfecto","Sofía","Fuente: Drive.") ],
+    instructions:[ mkI("Project instructions","","Por definir.") ],
   },
 ];
 
@@ -409,8 +424,10 @@ function ProjectCard({ p, onUpdate, tab, allProjects }) {
   const [exp, setExp] = useState(false);
   const [addSk, setAddSk] = useState(false);
   const [addKb, setAddKb] = useState(false);
+  const [addIns, setAddIns] = useState(false);
   const [nSk, setNSk] = useState({ name:"", color:"gray", status:"❌ Por crear", owner:"", drive:"" });
   const [nKb, setNKb] = useState({ name:"", status:"❌ Por crear", owner:"", drive:"", notes:"" });
+  const [nIns, setNIns] = useState({ name:"", status:"❌ Por crear", owner:"", drive:"", notes:"" });
   const [editLink, setEditLink] = useState(false);
   const [linkVal, setLinkVal] = useState(p.driveLink||"");
   const cat = CAT[p.cat];
@@ -423,15 +440,19 @@ function ProjectCard({ p, onUpdate, tab, allProjects }) {
   // Count how many OTHER projects share each skill/kb by name
   function getSharedCount(itemName, type) {
     if (!allProjects) return 0;
-    return allProjects.filter(proj => proj.id !== p.id && (type === "skill" ? proj.skills : proj.kb).some(x => x.name === itemName)).length;
+    return allProjects.filter(proj => proj.id !== p.id && (type === "skill" ? proj.skills : type === "kb" ? proj.kb : (proj.instructions||[])).some(x => x.name === itemName)).length;
   }
 
   function upSk(i,v){ onUpdate({...p,skills:p.skills.map((s,j)=>j===i?v:s)}); }
   function delSk(i){ const sk=p.skills.filter((_,j)=>j!==i); onUpdate({...p,skills:sk.length?sk:[{name:"skills a definir",color:"tbd",status:"a definir",owner:"",drive:""}]}); }
   function upKb(i,v){ onUpdate({...p,kb:p.kb.map((k,j)=>j===i?v:k)}); }
   function delKb(i){ onUpdate({...p,kb:p.kb.filter((_,j)=>j!==i)}); }
+  function upIns(i,v){ onUpdate({...p,instructions:(p.instructions||[]).map((x,j)=>j===i?v:x)}); }
+  function delIns(i){ onUpdate({...p,instructions:(p.instructions||[]).filter((_,j)=>j!==i)}); }
 
-  const list = tab==="skills" ? p.skills : p.kb;
+  const ins = p.instructions||[];
+  const actIns = ins.filter(x=>x.status==="✅ Lista").length;
+  const list = tab==="skills" ? p.skills : tab==="kb" ? p.kb : ins;
   const inputStyle = { fontSize:12, padding:"4px 8px", borderRadius:8, border:"1px solid rgba(30,26,52,0.12)", background:"#fff", color:"#1e1a34", fontFamily:"var(--font-main)" };
 
   return (
@@ -445,7 +466,7 @@ function ProjectCard({ p, onUpdate, tab, allProjects }) {
           <div style={{ fontSize:13, fontWeight:600, color:"var(--soul-purple)", lineHeight:1.35, letterSpacing:"-0.01em" }}>{p.name}{p.lock?" 🔒":""}</div>
           <div style={{ fontSize:10, color:"var(--balance-purple)", marginTop:2 }}>{p.owners}</div>
           <div style={{ fontSize:10, color:"var(--balance-purple)", marginTop:3, opacity:0.7 }}>
-            {tab==="skills" ? `${creadasSk}/${realSk.length} creadas · ${sharedSk} 🔁` : `${actKb}/${p.kb.length} KB actualizados`}
+            {tab==="skills" ? `${creadasSk}/${realSk.length} creadas · ${sharedSk} 🔁` : tab==="kb" ? `${actKb}/${p.kb.length} KB actualizados` : `${actIns}/${ins.length} instrucciones listas`}
           </div>
         </div>
         <div style={{ display:"flex", flexWrap:"wrap", gap:4, paddingTop:2 }}>
@@ -473,12 +494,15 @@ function ProjectCard({ p, onUpdate, tab, allProjects }) {
               );
             }
             const stc=ST[item.status]||ST["a definir"];
-            const kbShared = getSharedCount(item.name,"kb");
+            const itemType = tab==="kb"?"kb":"ins";
+            const itemShared = getSharedCount(item.name, itemType);
+            const chipBg = tab==="kb" ? "rgba(68,114,93,0.1)" : "rgba(96,96,133,0.1)";
+            const chipColor = tab==="kb" ? "#44725d" : "#606085";
             return (
               <span key={i} style={{ display:"inline-flex", gap:3, alignItems:"center" }}>
-                <span style={{ fontSize:10, padding:"3px 8px", borderRadius:10, background:"rgba(68,114,93,0.1)", color:"#44725d", fontWeight:500, whiteSpace:"nowrap" }}>{item.name}</span>
+                <span style={{ fontSize:10, padding:"3px 8px", borderRadius:10, background:chipBg, color:chipColor, fontWeight:500, whiteSpace:"nowrap" }}>{item.name}</span>
                 <span style={{ fontSize:9, padding:"2px 5px", borderRadius:8, background:stc.bg, color:stc.text }}>{item.status}</span>
-                {kbShared > 0 && <span style={{ fontSize:8, padding:"1px 4px", borderRadius:4, background:"var(--soul-purple)", color:"var(--root-cream)" }}>🔁</span>}
+                {itemShared > 0 && <span style={{ fontSize:8, padding:"1px 4px", borderRadius:4, background:"var(--soul-purple)", color:"var(--root-cream)" }}>🔁</span>}
               </span>
             );
           })}
@@ -614,6 +638,67 @@ function ProjectCard({ p, onUpdate, tab, allProjects }) {
               ) : <button onClick={()=>setAddKb(true)} style={{ fontSize:11, marginTop:8, padding:"5px 14px", borderRadius:8 }}>+ Añadir KB file</button>}
             </>
           )}
+          {tab==="ins" && (
+            <>
+              <div style={{ fontSize:10, color:"var(--balance-purple)", padding:"10px 0 6px 0", opacity:0.6, letterSpacing:"0.03em" }}>
+                PROJECT INSTRUCTIONS — estado, responsable y link
+              </div>
+              {ins.map((it,i)=>(
+                <ItemRow key={i} item={it} statusOpts={INS_STATUS} isSkill={false} onUpdate={v=>upIns(i,v)} onDelete={()=>delIns(i)} sharedIn={getSharedCount(it.name,"ins")} />
+              ))}
+              {addIns ? (
+                <div style={{ display:"flex", flexDirection:"column", gap:8, marginTop:8, padding:"10px 12px", borderRadius:10, background:"rgba(30,26,52,0.03)", border:"1px solid rgba(30,26,52,0.06)" }}>
+                  {/* Picker: existing instructions from other projects */}
+                  {(() => {
+                    const currentNames = new Set(ins.map(x => x.name.trim()));
+                    const existing = [];
+                    const seen = new Set();
+                    (allProjects||[]).forEach(proj => {
+                      if (proj.id === p.id) return;
+                      (proj.instructions||[]).forEach(x => {
+                        const n = x.name.trim();
+                        if (currentNames.has(n) || seen.has(n)) return;
+                        seen.add(n);
+                        existing.push(x);
+                      });
+                    });
+                    if (existing.length === 0) return null;
+                    return (
+                      <div>
+                        <div style={{ fontSize:10, color:"var(--balance-purple)", marginBottom:4, opacity:0.7 }}>Agregar instrucción existente de otro proyecto:</div>
+                        <div style={{ display:"flex", flexWrap:"wrap", gap:4 }}>
+                          {existing.map((x,i) => {
+                            const stc = ST[x.status] || ST["a definir"];
+                            return (
+                              <button key={i} onClick={() => {
+                                onUpdate({...p, instructions:[...ins, {...x}]});
+                                setAddIns(false);
+                                showToast("Instrucción '" + x.name + "' agregada (compartida)");
+                              }} style={{ fontSize:10, padding:"4px 10px", borderRadius:14, background:"rgba(96,96,133,0.1)", color:"#606085", border:"1px solid rgba(30,26,52,0.08)", cursor:"pointer", fontWeight:500 }}>
+                                {x.name} <span style={{opacity:0.5, fontSize:9}}>({x.status})</span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                        <div style={{ fontSize:10, color:"var(--balance-purple)", margin:"8px 0 4px", opacity:0.7 }}>O crear una nueva:</div>
+                      </div>
+                    );
+                  })()}
+                  <div style={{ display:"flex", flexWrap:"wrap", gap:6 }}>
+                    <input value={nIns.name} onChange={e=>setNIns(d=>({...d,name:e.target.value}))} placeholder="Nombre instrucción" style={{...inputStyle, width:180}} />
+                    <select value={nIns.status} onChange={e=>setNIns(d=>({...d,status:e.target.value}))} style={inputStyle}>
+                      {INS_STATUS.map(s=><option key={s} value={s}>{s}</option>)}
+                    </select>
+                    <input value={nIns.owner} onChange={e=>setNIns(d=>({...d,owner:e.target.value}))} placeholder="Owner" style={{...inputStyle, width:80}} />
+                    <input value={nIns.drive} onChange={e=>setNIns(d=>({...d,drive:e.target.value}))} placeholder="Link" style={{...inputStyle, width:140}} />
+                    <input value={nIns.notes} onChange={e=>setNIns(d=>({...d,notes:e.target.value}))} placeholder="Notas" style={{...inputStyle, width:200}} />
+                    <button onClick={()=>{ if(!nIns.name.trim())return; onUpdate({...p,instructions:[...ins,{...nIns}]}); setNIns({name:"",status:"❌ Por crear",owner:"",drive:"",notes:""}); setAddIns(false); }} style={{ fontSize:11, padding:"4px 12px", background:"var(--soul-purple)", color:"var(--root-cream)", border:"none", borderRadius:8 }}>Añadir nueva</button>
+                    <button onClick={()=>setAddIns(false)} style={{ fontSize:11, padding:"4px 12px" }}>Cancelar</button>
+                  </div>
+                </div>
+              ) : <button onClick={()=>setAddIns(true)} style={{ fontSize:11, marginTop:8, padding:"5px 14px", borderRadius:8 }}>+ Añadir instrucción</button>}
+            </>
+          )}
           <div style={{ fontSize:10, color:"var(--balance-purple)", padding:"12px 0 4px 0", opacity:0.5, letterSpacing:"0.03em" }}>LINK INSTRUCCIONES / DRIVE</div>
           {editLink ? (
             <div style={{ display:"flex", gap:6 }}>
@@ -643,7 +728,22 @@ function App() {
   const [lastSaved, setLastSaved] = useState(null);
 
   useEffect(()=>{
-    try { const raw = localStorage.getItem(STORAGE_KEY); if (raw) { const p = JSON.parse(raw); if (Array.isArray(p)&&p.length>0) setProjects(p); } } catch(e){}
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        let p = JSON.parse(raw);
+        if (Array.isArray(p)&&p.length>0) {
+          // Migration: add instructions array if missing
+          p = p.map(proj => {
+            if (!proj.instructions) {
+              return { ...proj, instructions: [{ name:"Project instructions", status:"❌ Por crear", owner:"", drive:"", notes:"Por definir." }] };
+            }
+            return proj;
+          });
+          setProjects(p);
+        }
+      }
+    } catch(e){}
     setLoaded(true);
   },[]);
 
@@ -700,7 +800,7 @@ function App() {
     let syncCount = 0;
     const synced = allProjects.map(proj => {
       if (proj.id === changedProjectId) return proj;
-      const list = type === "skill" ? proj.skills : proj.kb;
+      const list = type === "skill" ? proj.skills : type === "kb" ? proj.kb : (proj.instructions||[]);
       const idx = list.findIndex(x => x.name.trim() === itemName);
       if (idx === -1) return proj;
       // Found a match — update it
@@ -709,7 +809,8 @@ function App() {
         if (i !== idx) return x;
         return { ...x, status: changedItem.status, owner: changedItem.owner, drive: changedItem.drive, notes: changedItem.notes || x.notes };
       });
-      return { ...proj, [type === "skill" ? "skills" : "kb"]: updatedList };
+      const key = type === "skill" ? "skills" : type === "kb" ? "kb" : "instructions";
+      return { ...proj, [key]: updatedList };
     });
     return { synced, syncCount };
   }
@@ -743,6 +844,16 @@ function App() {
         totalSynced += result.syncCount;
       });
 
+      // --- Sync Instructions ---
+      (updatedProject.instructions||[]).forEach(newIns => {
+        if (!newIns.name.trim()) return;
+        const oldIns = (prev.instructions||[]).find(x => x.name.trim() === newIns.name.trim());
+        if (oldIns && oldIns.status === newIns.status && oldIns.owner === newIns.owner && oldIns.drive === newIns.drive && (oldIns.notes||"") === (newIns.notes||"")) return;
+        const result = syncSharedItems(next, updatedProject.id, "ins", newIns);
+        next = result.synced;
+        totalSynced += result.syncCount;
+      });
+
       if (totalSynced > 0) {
         console.log("[VAU SYNC]", totalSynced, "projects synced");
         setTimeout(() => showToast("🔁 Sincronizado en " + totalSynced + " proyecto" + (totalSynced>1?"s":"") + " más"), 100);
@@ -754,17 +865,23 @@ function App() {
 
   const allSk = projects.flatMap(p=>p.skills.filter(s=>s.name!=="skills a definir"));
   const allKb = projects.flatMap(p=>p.kb);
+  const allIns = projects.flatMap(p=>(p.instructions||[]));
 
   const stats = tab==="skills" ? [
     { label:"Skills totales",   val:allSk.length,                                       bg:"rgba(30,26,52,0.04)", accent:"var(--soul-purple)" },
     { label:"Creadas",           val:allSk.filter(s=>s.status==="✅ Creada").length,     bg:"rgba(68,114,93,0.1)", accent:"#44725d" },
     { label:"Por crear",         val:allSk.filter(s=>s.status==="❌ Por crear").length,  bg:"rgba(96,96,133,0.08)", accent:"#606085" },
     { label:"Ola 2",             val:allSk.filter(s=>s.status==="⏳ Ola 2").length,      bg:"rgba(98,191,189,0.1)", accent:"#1e1a34" },
-  ] : [
+  ] : tab==="kb" ? [
     { label:"KB files totales",  val:allKb.length,                                          bg:"rgba(30,26,52,0.04)", accent:"var(--soul-purple)" },
     { label:"Actualizados",       val:allKb.filter(k=>k.status==="✅ Actualizado").length,  bg:"rgba(68,114,93,0.1)", accent:"#44725d" },
     { label:"Actualizar",         val:allKb.filter(k=>k.status==="🔄 Actualizar").length,   bg:"rgba(219,223,52,0.12)", accent:"#44725d" },
     { label:"Por crear",          val:allKb.filter(k=>k.status==="❌ Por crear").length,    bg:"rgba(96,96,133,0.08)", accent:"#606085" },
+  ] : [
+    { label:"Instructions totales", val:allIns.length,                                          bg:"rgba(30,26,52,0.04)", accent:"var(--soul-purple)" },
+    { label:"Listas",               val:allIns.filter(x=>x.status==="✅ Lista").length,         bg:"rgba(68,114,93,0.1)", accent:"#44725d" },
+    { label:"Actualizar",           val:allIns.filter(x=>x.status==="🔄 Actualizar").length,    bg:"rgba(219,223,52,0.12)", accent:"#44725d" },
+    { label:"Por crear",            val:allIns.filter(x=>x.status==="❌ Por crear").length,     bg:"rgba(96,96,133,0.08)", accent:"#606085" },
   ];
 
   const visible = SECTIONS.map(s=>({
@@ -778,7 +895,7 @@ function App() {
       {/* Tab bar + save status */}
       <div style={{ display:"flex", gap:8, marginBottom:16, flexWrap:"wrap", alignItems:"center", justifyContent:"space-between" }}>
         <div style={{ display:"flex", gap:4 }}>
-          {[["skills","Skills"],["kb","Knowledge Files"]].map(([val,label])=>(
+          {[["skills","Skills"],["kb","Knowledge Files"],["ins","Instructions"]].map(([val,label])=>(
             <button key={val} onClick={()=>setTab(val)}
               style={{ fontSize:13, padding:"6px 20px", borderRadius:24, fontWeight:tab===val?600:400,
                 background:tab===val?"var(--soul-purple)":"transparent",
@@ -820,7 +937,7 @@ function App() {
 
       {/* Column headers */}
       <div style={{ display:"grid", gridTemplateColumns:"210px 1fr 1fr", gap:10, padding:"4px 14px 8px 14px" }}>
-        {["Proyecto · Owner","Áreas Notion · MCP", tab==="skills"?"Skills · 🔁 compartida":"Knowledge Files"].map(h=>(
+        {["Proyecto · Owner","Áreas Notion · MCP", tab==="skills"?"Skills · 🔁 compartida":tab==="kb"?"Knowledge Files":"Instructions"].map(h=>(
           <span key={h} style={{ fontSize:10, color:"var(--balance-purple)", letterSpacing:"0.04em", opacity:0.5, fontWeight:500 }}>{h.toUpperCase()}</span>
         ))}
       </div>
@@ -840,7 +957,9 @@ function App() {
         <div style={{ marginBottom:4 }}>
           {tab==="skills"
             ? "Clic en fila para expandir y editar · 🔁 N = compartida en N proyectos · Al cambiar status/owner/drive se sincroniza automáticamente"
-            : "🔁 N = KB compartido en N proyectos · Al cambiar status/owner/drive se sincroniza automáticamente · Formato .md · máx 5-8 por proyecto · máx 15K palabras"}
+            : tab==="kb"
+            ? "🔁 N = KB compartido en N proyectos · Al cambiar status/owner/drive se sincroniza automáticamente · Formato .md · máx 5-8 por proyecto · máx 15K palabras"
+            : "🔁 N = instrucción compartida en N proyectos · Al cambiar status/owner/drive se sincroniza automáticamente"}
         </div>
         <div style={{ fontSize:10, opacity:0.7 }}>
           Sincronización automática: al editar un item compartido 🔁, el cambio se refleja en todos los proyectos que lo tienen.
