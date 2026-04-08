@@ -347,7 +347,7 @@ const SECTIONS = [
   { cat:"INFRAESTRUCTURA",label:"Infraestructura — sistema Claude completo",                ids:[13] },
 ];
 
-const STORAGE_KEY = "vau_dash_v6";
+const STORAGE_KEY = "vau_dash_v7";
 
 function showToast(msg) {
   const el = document.getElementById("toast");
@@ -617,62 +617,58 @@ function App() {
     };
   }, [projects]);
 
+  function syncSharedItems(allProjects, changedProjectId, type, changedItem) {
+    // Find all other projects that have an item with the same name
+    const itemName = changedItem.name.trim();
+    let syncCount = 0;
+    const synced = allProjects.map(proj => {
+      if (proj.id === changedProjectId) return proj;
+      const list = type === "skill" ? proj.skills : proj.kb;
+      const idx = list.findIndex(x => x.name.trim() === itemName);
+      if (idx === -1) return proj;
+      // Found a match — update it
+      syncCount++;
+      const updatedList = list.map((x, i) => {
+        if (i !== idx) return x;
+        return { ...x, status: changedItem.status, owner: changedItem.owner, drive: changedItem.drive, notes: changedItem.notes || x.notes };
+      });
+      return { ...proj, [type === "skill" ? "skills" : "kb"]: updatedList };
+    });
+    return { synced, syncCount };
+  }
+
   function upP(updatedProject) {
     setProjects(ps => {
-      // First apply the direct update
-      let next = ps.map(x => x.id === updatedProject.id ? updatedProject : x);
       const prev = ps.find(x => x.id === updatedProject.id);
-      if (!prev) return next;
+      if (!prev) return ps.map(x => x.id === updatedProject.id ? updatedProject : x);
 
-      // --- Sync shared SKILLS ---
-      // Find skills that changed in this update
-      updatedProject.skills.forEach((newSk) => {
-        if (newSk.name === "skills a definir") return;
-        // Find matching old skill by name
-        const oldSk = prev.skills.find(s => s.name === newSk.name);
-        // Check if status, owner, drive, or notes changed
-        const changed = !oldSk || oldSk.status !== newSk.status || oldSk.owner !== newSk.owner || oldSk.drive !== newSk.drive || (oldSk.notes||"") !== (newSk.notes||"");
-        if (!changed) return;
-        // Sync to all other projects that have a skill with the same name AND color "shared"
-        // OR same name regardless of color (for skills that appear in multiple projects)
-        next = next.map(proj => {
-          if (proj.id === updatedProject.id) return proj;
-          const hasMatch = proj.skills.some(s => s.name === newSk.name);
-          if (!hasMatch) return proj;
-          return {
-            ...proj,
-            skills: proj.skills.map(s => {
-              if (s.name !== newSk.name) return s;
-              return { ...s, status: newSk.status, owner: newSk.owner, drive: newSk.drive, notes: newSk.notes || s.notes };
-            })
-          };
-        });
+      // Apply direct update first
+      let next = ps.map(x => x.id === updatedProject.id ? updatedProject : x);
+      let totalSynced = 0;
+
+      // --- Sync SKILLS ---
+      updatedProject.skills.forEach(newSk => {
+        if (newSk.name === "skills a definir" || !newSk.name.trim()) return;
+        const oldSk = prev.skills.find(s => s.name.trim() === newSk.name.trim());
+        if (oldSk && oldSk.status === newSk.status && oldSk.owner === newSk.owner && oldSk.drive === newSk.drive && (oldSk.notes||"") === (newSk.notes||"")) return;
+        const result = syncSharedItems(next, updatedProject.id, "skill", newSk);
+        next = result.synced;
+        totalSynced += result.syncCount;
       });
 
-      // --- Sync shared KB files ---
-      updatedProject.kb.forEach((newKb) => {
-        const oldKb = prev.kb.find(k => k.name === newKb.name);
-        const changed = !oldKb || oldKb.status !== newKb.status || oldKb.owner !== newKb.owner || oldKb.drive !== newKb.drive || (oldKb.notes||"") !== (newKb.notes||"");
-        if (!changed) return;
-        // Sync to all other projects that have a KB with the same name
-        next = next.map(proj => {
-          if (proj.id === updatedProject.id) return proj;
-          const hasMatch = proj.kb.some(k => k.name === newKb.name);
-          if (!hasMatch) return proj;
-          return {
-            ...proj,
-            kb: proj.kb.map(k => {
-              if (k.name !== newKb.name) return k;
-              return { ...k, status: newKb.status, owner: newKb.owner, drive: newKb.drive, notes: newKb.notes || k.notes };
-            })
-          };
-        });
+      // --- Sync KB files ---
+      updatedProject.kb.forEach(newKb => {
+        if (!newKb.name.trim()) return;
+        const oldKb = prev.kb.find(k => k.name.trim() === newKb.name.trim());
+        if (oldKb && oldKb.status === newKb.status && oldKb.owner === newKb.owner && oldKb.drive === newKb.drive && (oldKb.notes||"") === (newKb.notes||"")) return;
+        const result = syncSharedItems(next, updatedProject.id, "kb", newKb);
+        next = result.synced;
+        totalSynced += result.syncCount;
       });
 
-      // Show toast if sync happened
-      const syncedCount = next.filter((proj, i) => proj !== ps[i] && proj.id !== updatedProject.id).length;
-      if (syncedCount > 0) {
-        setTimeout(() => showToast(`🔁 Sincronizado en ${syncedCount} proyecto${syncedCount>1?"s":""} más`), 100);
+      if (totalSynced > 0) {
+        console.log("[VAU SYNC]", totalSynced, "projects synced");
+        setTimeout(() => showToast("🔁 Sincronizado en " + totalSynced + " proyecto" + (totalSynced>1?"s":"") + " más"), 100);
       }
 
       return next;
