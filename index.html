@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VAU AI System Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<style>
+  :root {
+    --root-cream: #f0ebdd;
+    --soul-purple: #1e1a34;
+    --balance-purple: #606085;
+    --body-blue: #62bfbd;
+    --vau-green: #44725d;
+    --spirit-green: #dbdf34;
+    --font-main: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-main);
+    background: var(--root-cream);
+    color: var(--soul-purple);
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .site-header {
+    background: var(--soul-purple);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .logo-text {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--root-cream);
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .logo-text span {
+    font-weight: 300;
+    font-size: 13px;
+    display: block;
+    letter-spacing: 0.12em;
+    margin-top: 2px;
+    opacity: 0.6;
+  }
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(96,96,133,0.3);
+    color: var(--body-blue);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.04em;
+  }
+  .header-badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--body-blue);
+  }
+  .header-actions {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .header-actions button {
+    background: rgba(240,235,221,0.08);
+    color: var(--root-cream);
+    border: 1px solid rgba(240,235,221,0.12);
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: var(--font-main);
+    font-weight: 400;
+    transition: all 0.2s;
+    letter-spacing: 0.01em;
+  }
+  .header-actions button:hover {
+    background: rgba(240,235,221,0.16);
+    border-color: rgba(240,235,221,0.25);
+  }
+
+  /* Main */
+  .main-content {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 24px 32px 48px 32px;
+  }
+
+  /* Buttons & inputs */
+  button {
+    cursor: pointer;
+    font-family: var(--font-main);
+    border: 1px solid rgba(30,26,52,0.12);
+    background: rgba(30,26,52,0.04);
+    border-radius: 8px;
+    color: var(--soul-purple);
+    transition: all 0.15s;
+  }
+  button:hover { background: rgba(30,26,52,0.08); }
+  input, select {
+    font-family: var(--font-main);
+    outline: none;
+  }
+  input:focus, select:focus {
+    border-color: var(--balance-purple) !important;
+    box-shadow: 0 0 0 2px rgba(96,96,133,0.15);
+  }
+  a { text-decoration: none; color: var(--vau-green); }
+  a:hover { text-decoration: underline; }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--soul-purple);
+    color: var(--root-cream);
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 13px;
+    z-index: 999;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+    box-shadow: 0 8px 24px rgba(30,26,52,0.25);
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Subtle gradient glow */
+  .gradient-glow {
+    position: fixed;
+    bottom: -200px;
+    right: -200px;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(98,191,189,0.08) 0%, rgba(219,223,52,0.04) 50%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(30,26,52,0.15); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(30,26,52,0.25); }
+</style>
+</head>
+<body>
+
+<div class="gradient-glow"></div>
+
+<div class="site-header">
+  <div class="header-inner">
+    <div class="logo-area">
+      <div class="logo-text">vau<span>nutrition</span></div>
+      <div class="header-badge">AI System Dashboard</div>
+    </div>
+    <div class="header-actions">
+      <button id="exportBtn">Exportar</button>
+      <button id="importBtn">Importar</button>
+      <input type="file" id="importFile" accept=".json" style="display:none" />
+      <button id="resetBtn">Reset</button>
+    </div>
+  </div>
+</div>
+
+<div class="main-content">
+  <div id="root"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+const CAT = {
+  CEREBRO:        { bg: "#1e1a34", text: "#f0ebdd" },
+  REVENUE:        { bg: "#44725d", text: "#f0ebdd" },
+  "EJECUCIÓN":    { bg: "#606085", text: "#f0ebdd" },
+  OPERACIONES:    { bg: "#62bfbd", text: "#1e1a34" },
+  ESCALA:         { bg: "#dbdf34", text: "#1e1a34" },
+  INFRAESTRUCTURA:{ bg: "#1e1a34", text: "#62bfbd" },
+};
+
+const AREA_COLORS = {
+  "1. Brand":"rgba(30,26,52,0.08)","2. Content":"rgba(68,114,93,0.1)","3. Product":"rgba(68,114,93,0.1)",
+  "4. Strategy":"rgba(30,26,52,0.08)","5. Compliance":"rgba(96,96,133,0.12)","6. People":"rgba(30,26,52,0.06)",
+  "7. Growth":"rgba(219,223,52,0.15)","8. Paid Media":"rgba(98,191,189,0.12)","9. TikTok Shop":"rgba(96,96,133,0.12)",
+  "10. Email SMS":"rgba(98,191,189,0.12)","11. Ops":"rgba(30,26,52,0.06)","12. Finance":"rgba(219,223,52,0.12)",
+  "13. CX":"rgba(68,114,93,0.1)","14. CRO":"rgba(98,191,189,0.1)","15. Data":"rgba(96,96,133,0.1)",
+  "16. Tech":"rgba(30,26,52,0.06)","Todas":"rgba(68,114,93,0.08)",
+};
+const AREA_TEXT = {
+  "1. Brand":"#1e1a34","2. Content":"#44725d","3. Product":"#44725d",
+  "4. Strategy":"#1e1a34","5. Compliance":"#606085","6. People":"#1e1a34",
+  "7. Growth":"#44725d","8. Paid Media":"#1e1a34","9. TikTok Shop":"#606085",
+  "10. Email SMS":"#1e1a34","11. Ops":"#1e1a34","12. Finance":"#44725d",
+  "13. CX":"#44725d","14. CRO":"#1e1a34","15. Data":"#606085",
+  "16. Tech":"#1e1a34","Todas":"#44725d",
+};
+
+const SK_COLORS = {
+  purple:{ bg:"rgba(96,96,133,0.15)", text:"#1e1a34" },
+  teal:  { bg:"rgba(68,114,93,0.12)", text:"#44725d" },
+  coral: { bg:"rgba(96,96,133,0.1)", text:"#606085" },
+  amber: { bg:"rgba(219,223,52,0.15)", text:"#44725d" },
+  gray:  { bg:"rgba(30,26,52,0.06)", text:"#1e1a34" },
+  blue:  { bg:"rgba(98,191,189,0.15)", text:"#1e1a34" },
+  pink:  { bg:"rgba(96,96,133,0.12)", text:"#606085" },
+  shared:{ bg:"rgba(30,26,52,0.05)", text:"#1e1a34", dashed:true },
+  tbd:   { bg:"transparent", text:"rgba(30,26,52,0.35)", dashed:true },
+};
+
+const SK_STATUS = ["✅ Creada","🔄 Actualizar","❌ Por crear","⏳ Ola 2"];
+const KB_STATUS = ["✅ Actualizado","🔄 Actualizar","❌ Por crear"];
+const ST = {
+  "✅ Creada":       { bg:"rgba(68,114,93,0.12)", text:"#44725d" },
+  "✅ Actualizado":  { bg:"rgba(68,114,93,0.12)", text:"#44725d" },
+  "🔄 Actualizar":   { bg:"rgba(219,223,52,0.2)", text:"#44725d" },
+  "❌ Por crear":    { bg:"rgba(96,96,133,0.1)", text:"#606085" },
+  "⏳ Ola 2":        { bg:"rgba(98,191,189,0.12)", text:"#1e1a34" },
+  "a definir":       { bg:"transparent", text:"rgba(30,26,52,0.3)" },
+};
+
+const mk  = (name, color, owner="") => ({ name, color, status:"❌ Por crear", owner, drive:"" });
+const mkK = (name, owner="", note="") => ({ name, status:"❌ Por crear", owner, drive:"", notes:note });
+
+const INIT = [
+  { id:1, cat:"CEREBRO", name:"1. CEO & Strategic Command", lock:true, owners:"Paola · Jorge",
+    areas:["4. Strategy","3. Product","12. Finance","7. Growth","6. People","15. Data"],
+    mcp:"activo", driveLink:"",
+    skills:[ mk("skills a definir","tbd") ],
+    kb:[ mkK("Brand DNA Master File","Sofía","KB file .md — exportar de Área 1 Brand Core. CRÍTICO."), mkK("ICP resumido","Sofía","KB file .md — exportar de Área 1 Brand Core > ICP 360°."), mkK("OKRs Q2","Paola","KB file .md — exportar de Área 4 Strategy & Roadmap."), mkK("Super Biblia Chase (completa)","Sofía","KB file .md — exportar de Drive y subir al proyecto Claude.") ],
+  },
+  { id:2, cat:"CEREBRO", name:"2. Brand & Quality Standards", lock:true, owners:"Paola · Sofía · MP",
+    areas:["1. Brand","2. Content","5. Compliance","3. Product","14. CRO"],
+    mcp:"opcional", driveLink:"",
+    skills:[ mk("skills a definir","tbd") ],
+    kb:[ mkK("Brand DNA Master File","Sofía","CRÍTICO. 8-15K palabras."), mkK("Claims aprobados","Sofía","Fuente: Área 5 Compliance & Regulatory."), mkK("Lexicon (5 capas)","Sofía","Fuente: Área 1 Brand Core > VAU Lexicon Master."), mkK("Tone of Voice dual","Sofía","Fuente: Área 1 Brand Core > Tone of Voice."), mkK("ICP resumido","Sofía","Fuente: Área 1 Brand Core > ICP 360°.") ],
+  },
+  { id:3, cat:"REVENUE", name:"3. TikTok & E-Commerce", lock:false, owners:"Sofía · Daniela · Jorge",
+    areas:["9. TikTok Shop","2. Content","7. Growth","14. CRO","8. Paid Media"],
+    mcp:"activo", driveLink:"",
+    skills:[ mk("vau-producto-script","shared","Sofía"), mk("vau-ugc-script","teal","Sofía"), mk("vau-caption-tiktok","shared","Sofía"), mk("vau-hook-generator","shared","Sofía"), mk("vau-ads-tiktok","teal","Jorge"), mk("vau-ads-tiktokshop","teal","Jorge"), mk("vau-ads-meta","teal","Jorge"), mk("vau-ads-retargeting","teal","Jorge"), mk("vau-web-pdp","teal","Jorge"), mk("vau-web-homepage","teal","Jorge"), mk("vau-web-popup","shared","Daniela") ],
+    kb:[ mkK("Brand DNA Master File","Sofía","CRÍTICO."), mkK("Claims aprobados","Sofía","Fuente: Área 5."), mkK("ICP resumido","Sofía","Fuente: Área 1."), mkK("Fórmula VF1 + Refocus","Sofía","Fuente: Área 3 Product."), mkK("TikTok Shop strategy","Sofía","Fuente: Área 9."), mkK("Super Biblia Chase (completa)","Sofía","KB file .md.") ],
+  },
+  { id:4, cat:"REVENUE", name:"4. Email & Retention", lock:false, owners:"Daniela · Sofía",
+    areas:["10. Email SMS","13. CX","2. Content","14. CRO"],
+    mcp:"activo", driveLink:"",
+    skills:[ mk("vau-email-welcome","coral","Daniela"), mk("vau-email-abandonment","coral","Daniela"), mk("vau-email-postpurchase","coral","Daniela"), mk("vau-email-newsletter","coral","Daniela"), mk("vau-email-conversion","coral","Daniela"), mk("vau-email-retention","coral","Daniela"), mk("vau-hook-generator","shared","Sofía"), mk("vau-web-faq","coral","Daniela"), mk("vau-web-popup","shared","Daniela"), mk("vau-web-seo","coral","Jorge") ],
+    kb:[ mkK("Brand DNA Master File","Sofía","CRÍTICO."), mkK("Claims aprobados","Sofía","Fuente: Área 5."), mkK("ICP resumido","Sofía","Fuente: Área 1."), mkK("Fórmula VF1 + Refocus","Sofía","Fuente: Área 3."), mkK("Email flows & templates","Daniela","Fuente: Área 10."), mkK("Ecosistema Mktg v2 Chase — sec 5","Daniela","KB file .md."), mkK("Super Biblia Chase (completa)","Sofía","KB file .md.") ],
+  },
+  { id:5, cat:"REVENUE", name:"5. Performance Marketing", lock:false, owners:"Jorge · Sofía",
+    areas:["8. Paid Media","15. Data","7. Growth","14. CRO","12. Finance"],
+    mcp:"opcional", driveLink:"",
+    skills:[ mk("vau-ads-meta","amber","Jorge"), mk("vau-ads-tiktok","amber","Jorge"), mk("vau-ads-retargeting","amber","Jorge"), mk("vau-hook-generator","shared","Sofía"), mk("vau-web-pdp","amber","Jorge") ],
+    kb:[ mkK("Brand DNA Master File","Sofía","CRÍTICO."), mkK("Claims aprobados","Sofía","Fuente: Área 5."), mkK("ICP resumido","Sofía","Fuente: Área 1."), mkK("Ecosistema Mktg v2 Chase","Jorge","KB file .md."), mkK("Creative Playbook Chase","Jorge","KB file .md."), mkK("Super Biblia Chase (completa)","Jorge","KB file .md.") ],
+  },
+  { id:6, cat:"EJECUCIÓN", name:"6. Brand & Content", lock:false, owners:"Sofía · Daniela · MP",
+    areas:["1. Brand","2. Content","3. Product","5. Compliance"],
+    mcp:"opcional", driveLink:"",
+    skills:[ mk("vau-brand-script","purple","Sofía"), mk("vau-ciencia-script","purple","Sofía"), mk("vau-producto-script","shared","Sofía"), mk("vau-founder-script","purple","Paola"), mk("vau-brand-carrusel","purple","Sofía"), mk("vau-ciencia-carrusel","purple","Sofía"), mk("vau-producto-carrusel","purple","Sofía"), mk("vau-founder-carrusel","purple","Paola"), mk("vau-hook-generator","shared","Sofía"), mk("vau-caption-instagram","purple","Sofía"), mk("vau-caption-linkedin","purple","Sofía"), mk("vau-caption-tiktok","shared","Sofía"), mk("vau-brand-checker","purple","MP"), mk("vau-visual-brief","purple","MP"), mk("vau-moodboard","purple","MP"), {...mk("vau-product-still","purple","MP"), status:"⏳ Ola 2"}, {...mk("vau-lifestyle-ritual","purple","MP"), status:"⏳ Ola 2"}, {...mk("vau-science-visual","purple","MP"), status:"⏳ Ola 2"}, {...mk("vau-compose-feed","purple","MP"), status:"⏳ Ola 2"}, {...mk("vau-ad-static","purple","MP"), status:"⏳ Ola 2"} ],
+    kb:[ mkK("Brand DNA Master File","Sofía","CRÍTICO. 8-15K palabras."), mkK("Voice DNA Paola","Sofía","Fuente: Área 1."), mkK("Lexicon (5 capas)","Sofía","Fuente: Área 1."), mkK("Tone of Voice dual","Sofía","Fuente: Área 1."), mkK("ICP resumido","Sofía","Fuente: Área 1."), mkK("Funnel Map + Hook System","Sofía","Fuente: Área 1."), mkK("Creative Playbook Chase","Sofía","KB file .md."), mkK("Super Biblia Chase (completa)","Sofía","KB file .md."), mkK("Content Guide","Sofía","Fuente: Área 2.") ],
+  },
+  { id:7, cat:"EJECUCIÓN", name:"7. Compliance & Regulatory", lock:true, owners:"Jorge · Paola",
+    areas:["5. Compliance","3. Product","14. CRO","11. Ops"],
+    mcp:"activo", driveLink:"",
+    skills:[ mk("skills a definir","tbd") ],
+    kb:[ mkK("Claims aprobados","Sofía","Fuente: Área 5."), mkK("Fórmula VF1 + Refocus","Sofía","Fuente: Área 3."), mkK("ICP resumido","Sofía","Fuente: Área 1."), mkK("FDA/DSHEA framework","Jorge","Fuente: Área 5."), mkK("Amazon ToS + TikTok compliance","Jorge","Fuente: Área 5."), mkK("FTC rules","Jorge","Fuente: Área 5.") ],
+  },
+  { id:8, cat:"EJECUCIÓN", name:"8. Product & Formulation", lock:false, owners:"Paola · Jorge · Sofía",
+    areas:["3. Product","5. Compliance","1. Brand","12. Finance"],
+    mcp:"opcional", driveLink:"",
+    skills:[ mk("vau-claim-validator","teal","Jorge"), mk("vau-ingredient-brief","teal","Sofía"), mk("vau-label-copy","teal","Sofía"), mk("vau-product-brief","teal","Paola"), mk("vau-science-explainer","teal","Sofía"), mk("vau-coa-summary","teal","Jorge") ],
+    kb:[ mkK("Fórmula VF1 + Refocus","Sofía","Fuente: Área 3."), mkK("Claims aprobados","Sofía","Fuente: Área 5."), mkK("Brand DNA Master File","Sofía","Fuente: Área 1."), mkK("Label anatomy REST FIRST","Jorge","Fuente: Área 3."), mkK("FDA/DSHEA + FTC rules","Jorge","Fuente: Área 5.") ],
+  },
+  { id:9, cat:"OPERACIONES", name:"9. Operations Hub", lock:true, owners:"Jorge · Paola",
+    areas:["11. Ops","12. Finance","5. Compliance","6. People","7. Growth"],
+    mcp:"activo", driveLink:"",
+    skills:[ mk("vau-sop-writer","gray","Jorge"), mk("vau-vendor-brief","gray","Jorge"), mk("vau-inventory-alert","gray","Jorge"), mk("vau-unit-economics","gray","Jorge"), mk("vau-cashflow-snapshot","gray","Jorge") ],
+    kb:[ mkK("SOPs Fulfillment & 3PL","Jorge","Fuente: Área 11."), mkK("P&L template + Unit Economics","Jorge","Fuente: Área 12."), mkK("CRO checklists Chase","Jorge","KB file .md."), mkK("ICP resumido","Sofía","Fuente: Área 1."), mkK("Providers & Contracts","Jorge","Fuente: Área 11.") ],
+  },
+  { id:10, cat:"OPERACIONES", name:"10. Strategy & Growth", lock:false, owners:"Sofía · Paola",
+    areas:["4. Strategy","7. Growth","12. Finance","15. Data","3. Product"],
+    mcp:"activo", driveLink:"",
+    skills:[ mk("skills a definir","tbd") ],
+    kb:[ mkK("ICP resumido","Sofía","Fuente: Área 1."), mkK("OKRs Q2","Paola","Fuente: Área 4."), mkK("Super Biblia Chase (completa)","Sofía","KB file .md.") ],
+  },
+  { id:11, cat:"ESCALA", name:"11. Market & Consumer Intelligence", lock:false, owners:"Sofía · Jorge · Paola",
+    areas:["3. Product","4. Strategy","7. Growth","15. Data","9. TikTok Shop"],
+    mcp:"opcional", driveLink:"",
+    skills:[ mk("skills a definir","tbd") ],
+    kb:[ mkK("ICP resumido","Sofía","Fuente: Área 1."), mkK("Benchmark & Brand References","Sofía","Fuente: Área 1."), mkK("Competitor list","Sofía","Fuente: Área 4.") ],
+  },
+  { id:12, cat:"ESCALA", name:"12. Automations & Systems", lock:false, owners:"Jorge · Sofía",
+    areas:["16. Tech","11. Ops","12. Finance","15. Data","10. Email SMS"],
+    mcp:"opcional", driveLink:"",
+    skills:[ mk("vau-script-builder","blue","Jorge"), mk("vau-zapier-flow","blue","Jorge"), mk("vau-dashboard-spec","blue","Jorge"), mk("vau-kpi-report","blue","Jorge"), mk("vau-attribution-analysis","blue","Jorge"), mk("vau-notion-sync-spec","blue","Sofía") ],
+    kb:[ mkK("Arquitectura AI-First","Sofía","Fuente: Área 16."), mkK("Tech stack doc","Jorge","Fuente: Área 16."), mkK("CLAUDE.md","Sofía","Fuente: GitHub repo."), mkK("Integration guides","Jorge","Fuente: Área 16.") ],
+  },
+  { id:13, cat:"INFRAESTRUCTURA", name:"13. AI Studio & Systems", lock:false, owners:"Equipo completo",
+    areas:["16. Tech","4. Strategy","6. People","15. Data","Todas"],
+    mcp:"activo", driveLink:"",
+    skills:[ mk("Construye todas las skills","gray","Sofía"), mk("Mantiene instrucciones","gray","Sofía"), mk("Actualiza KB files (48h)","gray","Sofía") ],
+    kb:[ mkK("Registro de Proyectos Claude","Sofía","Fuente: Área 16."), mkK("Protocolo de construcción de skills","Sofía","Fuente: Área 16."), mkK("Arquitectura AI-First","Sofía","Fuente: Área 16."), mkK("Fase 2 — Anatomía del proyecto perfecto","Sofía","Fuente: Drive.") ],
+  },
+];
+
+const SECTIONS = [
+  { cat:"CEREBRO",        label:"Cerebro — decisión estratégica · brand · calidad",        ids:[1,2] },
+  { cat:"REVENUE",        label:"Revenue — generación de ventas e ingresos",                ids:[3,4,5] },
+  { cat:"EJECUCIÓN",      label:"Ejecución — producción de contenido y operación",          ids:[6,7,8] },
+  { cat:"OPERACIONES",    label:"Operaciones — sistemas · finanzas · estructura",           ids:[9,10] },
+  { cat:"ESCALA",         label:"Escala — inteligencia · automatización",                   ids:[11,12] },
+  { cat:"INFRAESTRUCTURA",label:"Infraestructura — sistema Claude completo",                ids:[13] },
+];
+
+const STORAGE_KEY = "vau_dash_v6";
+
+function showToast(msg) {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.classList.add("show");
+  setTimeout(() => el.classList.remove("show"), 2200);
+}
+
+/* ItemRow */
+function ItemRow({ item, statusOpts, isSkill, onUpdate, onDelete }) {
+  const [open, setOpen] = useState(false);
+  const [d, setD] = useState({ ...item });
+  const sc = isSkill ? (SK_COLORS[item.color] || SK_COLORS.gray) : null;
+  const stc = ST[item.status] || ST["a definir"];
+
+  const inputStyle = { fontSize:12, padding:"4px 8px", borderRadius:8, border:"1px solid rgba(30,26,52,0.12)", background:"#fff", color:"#1e1a34", fontFamily:"var(--font-main)" };
+
+  if (!open) return (
+    <div onClick={() => setOpen(true)}
+      style={{ display:"flex", flexWrap:"wrap", gap:5, alignItems:"center", padding:"5px 8px", borderRadius:8, cursor:"pointer", marginBottom:2, transition:"background 0.15s" }}
+      onMouseEnter={e=>e.currentTarget.style.background="rgba(30,26,52,0.03)"}
+      onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+      {isSkill
+        ? <span style={{ fontSize:11, padding:"3px 10px", borderRadius:20, background:sc.bg, color:sc.text, fontWeight:500, border:sc.dashed?"1.5px dashed rgba(30,26,52,0.2)":"1px solid transparent", whiteSpace:"nowrap" }}>{item.name}</span>
+        : <span style={{ fontSize:11, padding:"3px 10px", borderRadius:20, background:"rgba(68,114,93,0.1)", color:"#44725d", fontWeight:500, whiteSpace:"nowrap" }}>{item.name}</span>
+      }
+      {item.status !== "a definir" && <span style={{ fontSize:10, padding:"2px 8px", borderRadius:12, background:stc.bg, color:stc.text, fontWeight:500 }}>{item.status}</span>}
+      {isSkill && item.color === "shared" && <span style={{ fontSize:9, padding:"2px 5px", borderRadius:4, background:"var(--soul-purple)", color:"var(--root-cream)", fontWeight:600 }}>🔁</span>}
+      {item.owner && <span style={{ fontSize:10, color:"var(--balance-purple)" }}>{item.owner}</span>}
+      {item.drive && <a href={item.drive} onClick={e=>e.stopPropagation()} target="_blank" rel="noopener" style={{ fontSize:10 }}>Drive ↗</a>}
+      {(item.notes) && <span style={{ fontSize:10, color:"var(--balance-purple)", fontStyle:"italic", opacity:0.7 }}>{item.notes}</span>}
+      <span style={{ fontSize:10, color:"rgba(30,26,52,0.25)", marginLeft:2 }}>✎</span>
+    </div>
+  );
+
+  return (
+    <div style={{ display:"flex", flexWrap:"wrap", gap:6, padding:"8px 10px", borderRadius:10, background:"rgba(30,26,52,0.03)", marginBottom:4, border:"1px solid rgba(30,26,52,0.06)" }}>
+      <input value={d.name} onChange={e=>setD(x=>({...x,name:e.target.value}))} placeholder="Nombre" style={{...inputStyle, width:170}} />
+      {isSkill && (
+        <select value={d.color} onChange={e=>setD(x=>({...x,color:e.target.value}))} style={{...inputStyle}}>
+          {Object.keys(SK_COLORS).map(c=><option key={c} value={c}>{c}</option>)}
+        </select>
+      )}
+      <select value={d.status} onChange={e=>setD(x=>({...x,status:e.target.value}))} style={{...inputStyle}}>
+        {statusOpts.map(s=><option key={s} value={s}>{s}</option>)}
+      </select>
+      <input value={d.owner} onChange={e=>setD(x=>({...x,owner:e.target.value}))} placeholder="Owner" style={{...inputStyle, width:80}} />
+      <input value={d.drive} onChange={e=>setD(x=>({...x,drive:e.target.value}))} placeholder="Link Drive / GitHub" style={{...inputStyle, width:160}} />
+      <input value={d.notes||""} onChange={e=>setD(x=>({...x,notes:e.target.value}))} placeholder="Notas" style={{...inputStyle, width:200}} />
+      <button onClick={()=>{ onUpdate(d); setOpen(false); }} style={{ fontSize:11, padding:"4px 12px", background:"var(--soul-purple)", color:"var(--root-cream)", border:"none", borderRadius:8 }}>Guardar</button>
+      <button onClick={()=>setOpen(false)} style={{ fontSize:11, padding:"4px 12px" }}>Cancelar</button>
+      <button onClick={onDelete} style={{ fontSize:11, padding:"4px 12px", color:"#c0392b", borderColor:"rgba(192,57,43,0.2)" }}>Eliminar</button>
+    </div>
+  );
+}
+
+/* ProjectCard */
+function ProjectCard({ p, onUpdate, tab }) {
+  const [exp, setExp] = useState(false);
+  const [addSk, setAddSk] = useState(false);
+  const [addKb, setAddKb] = useState(false);
+  const [nSk, setNSk] = useState({ name:"", color:"gray", status:"❌ Por crear", owner:"", drive:"" });
+  const [nKb, setNKb] = useState({ name:"", status:"❌ Por crear", owner:"", drive:"", notes:"" });
+  const [editLink, setEditLink] = useState(false);
+  const [linkVal, setLinkVal] = useState(p.driveLink||"");
+  const cat = CAT[p.cat];
+
+  const realSk = p.skills.filter(s=>s.name!=="skills a definir");
+  const creadasSk = realSk.filter(s=>s.status==="✅ Creada").length;
+  const actKb  = p.kb.filter(k=>k.status==="✅ Actualizado").length;
+  const sharedSk = realSk.filter(s=>s.color==="shared").length;
+
+  function upSk(i,v){ onUpdate({...p,skills:p.skills.map((s,j)=>j===i?v:s)}); }
+  function delSk(i){ const sk=p.skills.filter((_,j)=>j!==i); onUpdate({...p,skills:sk.length?sk:[{name:"skills a definir",color:"tbd",status:"a definir",owner:"",drive:""}]}); }
+  function upKb(i,v){ onUpdate({...p,kb:p.kb.map((k,j)=>j===i?v:k)}); }
+  function delKb(i){ onUpdate({...p,kb:p.kb.filter((_,j)=>j!==i)}); }
+
+  const list = tab==="skills" ? p.skills : p.kb;
+  const inputStyle = { fontSize:12, padding:"4px 8px", borderRadius:8, border:"1px solid rgba(30,26,52,0.12)", background:"#fff", color:"#1e1a34", fontFamily:"var(--font-main)" };
+
+  return (
+    <div style={{ borderRadius:12, border:"1px solid rgba(30,26,52,0.08)", marginBottom:6, overflow:"hidden", background:"rgba(255,255,255,0.5)", backdropFilter:"blur(8px)", transition:"box-shadow 0.2s" }}
+      onMouseEnter={e=>e.currentTarget.style.boxShadow="0 2px 12px rgba(30,26,52,0.06)"}
+      onMouseLeave={e=>e.currentTarget.style.boxShadow="none"}>
+      <div style={{ display:"grid", gridTemplateColumns:"210px 1fr 1fr", gap:10, padding:"10px 14px", cursor:"pointer", alignItems:"start" }}
+        onClick={()=>setExp(e=>!e)}>
+        <div>
+          <span style={{ display:"inline-block", fontSize:9, padding:"2px 8px", borderRadius:6, fontWeight:600, background:cat.bg, color:cat.text, marginBottom:4, letterSpacing:"0.04em" }}>{p.cat}</span>
+          <div style={{ fontSize:13, fontWeight:600, color:"var(--soul-purple)", lineHeight:1.35, letterSpacing:"-0.01em" }}>{p.name}{p.lock?" 🔒":""}</div>
+          <div style={{ fontSize:10, color:"var(--balance-purple)", marginTop:2 }}>{p.owners}</div>
+          <div style={{ fontSize:10, color:"var(--balance-purple)", marginTop:3, opacity:0.7 }}>
+            {tab==="skills" ? `${creadasSk}/${realSk.length} creadas · ${sharedSk} 🔁` : `${actKb}/${p.kb.length} KB actualizados`}
+          </div>
+        </div>
+        <div style={{ display:"flex", flexWrap:"wrap", gap:4, paddingTop:2 }}>
+          {p.areas.map(a=>(
+            <span key={a} style={{ fontSize:10, padding:"3px 8px", borderRadius:10, background:AREA_COLORS[a]||"rgba(30,26,52,0.06)", color:AREA_TEXT[a]||"#1e1a34", fontWeight:500, whiteSpace:"nowrap", lineHeight:1.4 }}>{a}</span>
+          ))}
+          <span style={{ fontSize:10, padding:"3px 8px", borderRadius:10, fontWeight:500, whiteSpace:"nowrap", lineHeight:1.4,
+            background:p.mcp==="activo"?"rgba(98,191,189,0.15)":"rgba(30,26,52,0.04)",
+            color:p.mcp==="activo"?"#1e1a34":"var(--balance-purple)",
+            border:p.mcp!=="activo"?"1px dashed rgba(30,26,52,0.15)":"1px solid transparent" }}>
+            {p.mcp==="activo"?"MCP ✦":"MCP opt."}
+          </span>
+        </div>
+        <div style={{ display:"flex", flexWrap:"wrap", gap:4, paddingTop:2, alignItems:"center" }}>
+          {list.slice(0, exp?undefined:3).map((item,i)=>{
+            if (tab==="skills") {
+              const sc=SK_COLORS[item.color]||SK_COLORS.gray;
+              const stc=ST[item.status]||ST["a definir"];
+              return (
+                <span key={i} style={{ display:"inline-flex", gap:3, alignItems:"center" }}>
+                  <span style={{ fontSize:10, padding:"3px 8px", borderRadius:10, background:sc.bg, color:sc.text, fontWeight:500, border:sc.dashed?"1.5px dashed rgba(30,26,52,0.15)":"1px solid transparent", whiteSpace:"nowrap" }}>{item.name}</span>
+                  {item.status!=="a definir" && <span style={{ fontSize:9, padding:"2px 5px", borderRadius:8, background:stc.bg, color:stc.text }}>{item.status}</span>}
+                  {item.color==="shared" && <span style={{ fontSize:8, padding:"1px 4px", borderRadius:4, background:"var(--soul-purple)", color:"var(--root-cream)" }}>🔁</span>}
+                </span>
+              );
+            }
+            const stc=ST[item.status]||ST["a definir"];
+            return (
+              <span key={i} style={{ display:"inline-flex", gap:3, alignItems:"center" }}>
+                <span style={{ fontSize:10, padding:"3px 8px", borderRadius:10, background:"rgba(68,114,93,0.1)", color:"#44725d", fontWeight:500, whiteSpace:"nowrap" }}>{item.name}</span>
+                <span style={{ fontSize:9, padding:"2px 5px", borderRadius:8, background:stc.bg, color:stc.text }}>{item.status}</span>
+              </span>
+            );
+          })}
+          {!exp && list.length>3 && <span style={{ fontSize:10, color:"var(--balance-purple)", opacity:0.6 }}>+{list.length-3}</span>}
+          <span style={{ fontSize:11, color:"var(--balance-purple)", marginLeft:"auto", opacity:0.4 }}>{exp?"▲":"▼"}</span>
+        </div>
+      </div>
+
+      {exp && (
+        <div style={{ padding:"0 14px 14px 14px", borderTop:"1px solid rgba(30,26,52,0.06)" }}>
+          {tab==="skills" && (
+            <>
+              <div style={{ fontSize:10, color:"var(--balance-purple)", padding:"10px 0 6px 0", opacity:0.6, letterSpacing:"0.03em" }}>
+                SKILLS — clic para editar · 🔁 = compartida entre proyectos
+              </div>
+              {p.skills.map((sk,i)=>(
+                <ItemRow key={i} item={sk} statusOpts={SK_STATUS} isSkill={true} onUpdate={v=>upSk(i,v)} onDelete={()=>delSk(i)} />
+              ))}
+              {addSk ? (
+                <div style={{ display:"flex", flexWrap:"wrap", gap:6, marginTop:8, padding:"8px 10px", borderRadius:10, background:"rgba(30,26,52,0.03)", border:"1px solid rgba(30,26,52,0.06)" }}>
+                  <input value={nSk.name} onChange={e=>setNSk(d=>({...d,name:e.target.value}))} placeholder="Nombre skill" style={{...inputStyle, width:170}} />
+                  <select value={nSk.color} onChange={e=>setNSk(d=>({...d,color:e.target.value}))} style={inputStyle}>
+                    {Object.keys(SK_COLORS).map(c=><option key={c} value={c}>{c}</option>)}
+                  </select>
+                  <select value={nSk.status} onChange={e=>setNSk(d=>({...d,status:e.target.value}))} style={inputStyle}>
+                    {SK_STATUS.map(s=><option key={s} value={s}>{s}</option>)}
+                  </select>
+                  <input value={nSk.owner} onChange={e=>setNSk(d=>({...d,owner:e.target.value}))} placeholder="Owner" style={{...inputStyle, width:80}} />
+                  <input value={nSk.drive} onChange={e=>setNSk(d=>({...d,drive:e.target.value}))} placeholder="Link" style={{...inputStyle, width:140}} />
+                  <button onClick={()=>{ if(!nSk.name.trim())return; const sk=p.skills.filter(s=>s.name!=="skills a definir"); onUpdate({...p,skills:[...sk,{...nSk}]}); setNSk({name:"",color:"gray",status:"❌ Por crear",owner:"",drive:""}); setAddSk(false); }} style={{ fontSize:11, padding:"4px 12px", background:"var(--soul-purple)", color:"var(--root-cream)", border:"none", borderRadius:8 }}>Añadir</button>
+                  <button onClick={()=>setAddSk(false)} style={{ fontSize:11, padding:"4px 12px" }}>Cancelar</button>
+                </div>
+              ) : <button onClick={()=>setAddSk(true)} style={{ fontSize:11, marginTop:8, padding:"5px 14px", borderRadius:8 }}>+ Añadir skill</button>}
+            </>
+          )}
+          {tab==="kb" && (
+            <>
+              <div style={{ fontSize:10, color:"var(--balance-purple)", padding:"10px 0 6px 0", opacity:0.6, letterSpacing:"0.03em" }}>
+                KB FILES — máx 5-8 por proyecto · máx 15,000 palabras · formato .md · sync 48h
+              </div>
+              {p.kb.map((kb,i)=>(
+                <ItemRow key={i} item={kb} statusOpts={KB_STATUS} isSkill={false} onUpdate={v=>upKb(i,v)} onDelete={()=>delKb(i)} />
+              ))}
+              {addKb ? (
+                <div style={{ display:"flex", flexWrap:"wrap", gap:6, marginTop:8, padding:"8px 10px", borderRadius:10, background:"rgba(30,26,52,0.03)", border:"1px solid rgba(30,26,52,0.06)" }}>
+                  <input value={nKb.name} onChange={e=>setNKb(d=>({...d,name:e.target.value}))} placeholder="Nombre KB" style={{...inputStyle, width:180}} />
+                  <select value={nKb.status} onChange={e=>setNKb(d=>({...d,status:e.target.value}))} style={inputStyle}>
+                    {KB_STATUS.map(s=><option key={s} value={s}>{s}</option>)}
+                  </select>
+                  <input value={nKb.owner} onChange={e=>setNKb(d=>({...d,owner:e.target.value}))} placeholder="Owner" style={{...inputStyle, width:80}} />
+                  <input value={nKb.drive} onChange={e=>setNKb(d=>({...d,drive:e.target.value}))} placeholder="Link" style={{...inputStyle, width:140}} />
+                  <input value={nKb.notes} onChange={e=>setNKb(d=>({...d,notes:e.target.value}))} placeholder="Notas" style={{...inputStyle, width:200}} />
+                  <button onClick={()=>{ if(!nKb.name.trim())return; onUpdate({...p,kb:[...p.kb,{...nKb}]}); setNKb({name:"",status:"❌ Por crear",owner:"",drive:"",notes:""}); setAddKb(false); }} style={{ fontSize:11, padding:"4px 12px", background:"var(--soul-purple)", color:"var(--root-cream)", border:"none", borderRadius:8 }}>Añadir</button>
+                  <button onClick={()=>setAddKb(false)} style={{ fontSize:11, padding:"4px 12px" }}>Cancelar</button>
+                </div>
+              ) : <button onClick={()=>setAddKb(true)} style={{ fontSize:11, marginTop:8, padding:"5px 14px", borderRadius:8 }}>+ Añadir KB file</button>}
+            </>
+          )}
+          <div style={{ fontSize:10, color:"var(--balance-purple)", padding:"12px 0 4px 0", opacity:0.5, letterSpacing:"0.03em" }}>LINK INSTRUCCIONES / DRIVE</div>
+          {editLink ? (
+            <div style={{ display:"flex", gap:6 }}>
+              <input value={linkVal} onChange={e=>setLinkVal(e.target.value)} placeholder="https://drive.google.com/..." style={{...{fontSize:12, padding:"4px 8px", borderRadius:8, border:"1px solid rgba(30,26,52,0.12)", background:"#fff", color:"#1e1a34", fontFamily:"var(--font-main)"}, flex:1}} />
+              <button onClick={()=>{ onUpdate({...p,driveLink:linkVal}); setEditLink(false); }} style={{ fontSize:11, padding:"4px 12px", background:"var(--soul-purple)", color:"var(--root-cream)", border:"none", borderRadius:8 }}>Guardar</button>
+              <button onClick={()=>setEditLink(false)} style={{ fontSize:11, padding:"4px 12px" }}>Cancelar</button>
+            </div>
+          ) : p.driveLink ? (
+            <div style={{ display:"flex", gap:8, alignItems:"center" }}>
+              <a href={p.driveLink} target="_blank" rel="noopener" style={{ fontSize:11 }}>{p.driveLink}</a>
+              <button onClick={()=>setEditLink(true)} style={{ fontSize:10, padding:"2px 8px" }}>Editar</button>
+            </div>
+          ) : <button onClick={()=>setEditLink(true)} style={{ fontSize:11, padding:"5px 14px", borderRadius:8 }}>+ Añadir link</button>}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* App */
+function App() {
+  const [projects, setProjects] = useState(INIT);
+  const [loaded, setLoaded] = useState(false);
+  const [tab, setTab] = useState("skills");
+  const [filter, setFilter] = useState("todos");
+  const [saving, setSaving] = useState(false);
+  const [lastSaved, setLastSaved] = useState(null);
+
+  useEffect(()=>{
+    try { const raw = localStorage.getItem(STORAGE_KEY); if (raw) { const p = JSON.parse(raw); if (Array.isArray(p)&&p.length>0) setProjects(p); } } catch(e){}
+    setLoaded(true);
+  },[]);
+
+  useEffect(()=>{
+    if(!loaded) return;
+    setSaving(true);
+    const t = setTimeout(()=>{
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(projects)); setLastSaved(new Date()); } catch(e){}
+      setSaving(false);
+    }, 600);
+    return ()=>clearTimeout(t);
+  },[projects, loaded]);
+
+  useEffect(()=>{
+    const exportBtn = document.getElementById("exportBtn");
+    const handleExport = () => {
+      const blob = new Blob([JSON.stringify(projects, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = "vau_dashboard_" + new Date().toISOString().slice(0,10) + ".json"; a.click();
+      URL.revokeObjectURL(url);
+      showToast("Backup exportado");
+    };
+    exportBtn.addEventListener("click", handleExport);
+    const importBtn = document.getElementById("importBtn");
+    const importFile = document.getElementById("importFile");
+    const handleImportClick = () => importFile.click();
+    const handleFileChange = (e) => {
+      const file = e.target.files[0]; if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try { const data = JSON.parse(ev.target.result); if (Array.isArray(data)&&data.length>0) { setProjects(data); showToast("Datos importados"); } else { showToast("Archivo inválido"); } } catch { showToast("Error al leer JSON"); }
+      };
+      reader.readAsText(file); importFile.value = "";
+    };
+    importBtn.addEventListener("click", handleImportClick);
+    importFile.addEventListener("change", handleFileChange);
+    const resetBtn = document.getElementById("resetBtn");
+    const handleReset = () => {
+      if (confirm("¿Resetear TODO el dashboard a datos iniciales?")) { setProjects(INIT); localStorage.removeItem(STORAGE_KEY); showToast("Dashboard reseteado"); }
+    };
+    resetBtn.addEventListener("click", handleReset);
+    return () => {
+      exportBtn.removeEventListener("click", handleExport);
+      importBtn.removeEventListener("click", handleImportClick);
+      importFile.removeEventListener("change", handleFileChange);
+      resetBtn.removeEventListener("click", handleReset);
+    };
+  }, [projects]);
+
+  function upP(p){ setProjects(ps=>ps.map(x=>x.id===p.id?p:x)); }
+
+  const allSk = projects.flatMap(p=>p.skills.filter(s=>s.name!=="skills a definir"));
+  const allKb = projects.flatMap(p=>p.kb);
+
+  const stats = tab==="skills" ? [
+    { label:"Skills totales",   val:allSk.length,                                       bg:"rgba(30,26,52,0.04)", accent:"var(--soul-purple)" },
+    { label:"Creadas",           val:allSk.filter(s=>s.status==="✅ Creada").length,     bg:"rgba(68,114,93,0.1)", accent:"#44725d" },
+    { label:"Por crear",         val:allSk.filter(s=>s.status==="❌ Por crear").length,  bg:"rgba(96,96,133,0.08)", accent:"#606085" },
+    { label:"Ola 2",             val:allSk.filter(s=>s.status==="⏳ Ola 2").length,      bg:"rgba(98,191,189,0.1)", accent:"#1e1a34" },
+  ] : [
+    { label:"KB files totales",  val:allKb.length,                                          bg:"rgba(30,26,52,0.04)", accent:"var(--soul-purple)" },
+    { label:"Actualizados",       val:allKb.filter(k=>k.status==="✅ Actualizado").length,  bg:"rgba(68,114,93,0.1)", accent:"#44725d" },
+    { label:"Actualizar",         val:allKb.filter(k=>k.status==="🔄 Actualizar").length,   bg:"rgba(219,223,52,0.12)", accent:"#44725d" },
+    { label:"Por crear",          val:allKb.filter(k=>k.status==="❌ Por crear").length,    bg:"rgba(96,96,133,0.08)", accent:"#606085" },
+  ];
+
+  const visible = SECTIONS.map(s=>({
+    ...s, projects:projects.filter(p=>s.ids.includes(p.id)&&(filter==="todos"||p.cat===filter))
+  })).filter(s=>s.projects.length>0);
+
+  const timeStr = lastSaved ? lastSaved.toLocaleTimeString("es-MX", {hour:"2-digit",minute:"2-digit"}) : "";
+
+  return (
+    <div style={{ padding:"0", fontFamily:"var(--font-main)", position:"relative", zIndex:1 }}>
+      {/* Tab bar + save status */}
+      <div style={{ display:"flex", gap:8, marginBottom:16, flexWrap:"wrap", alignItems:"center", justifyContent:"space-between" }}>
+        <div style={{ display:"flex", gap:4 }}>
+          {[["skills","Skills"],["kb","Knowledge Files"]].map(([val,label])=>(
+            <button key={val} onClick={()=>setTab(val)}
+              style={{ fontSize:13, padding:"6px 20px", borderRadius:24, fontWeight:tab===val?600:400,
+                background:tab===val?"var(--soul-purple)":"transparent",
+                color:tab===val?"var(--root-cream)":"var(--balance-purple)",
+                border:tab===val?"none":"1px solid rgba(30,26,52,0.12)",
+                letterSpacing:"-0.01em" }}>
+              {label}
+            </button>
+          ))}
+        </div>
+        <span style={{ fontSize:11, color:"var(--balance-purple)", opacity:0.6 }}>
+          {saving ? "Guardando..." : `Guardado ✓${timeStr ? " · " + timeStr : ""}`}
+        </span>
+      </div>
+
+      {/* Category filters */}
+      <div style={{ display:"flex", gap:5, marginBottom:16, flexWrap:"wrap" }}>
+        {["todos",...Object.keys(CAT)].map(f=>(
+          <button key={f} onClick={()=>setFilter(f)}
+            style={{ fontSize:11, padding:"4px 14px", borderRadius:20,
+              background:filter===f?"var(--soul-purple)":"transparent",
+              color:filter===f?"var(--root-cream)":"var(--balance-purple)",
+              border:filter===f?"none":"1px solid rgba(30,26,52,0.1)",
+              fontWeight:filter===f?600:400, letterSpacing:"0.01em" }}>
+            {f==="todos"?"Todos":f}
+          </button>
+        ))}
+      </div>
+
+      {/* Stats */}
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:10, marginBottom:20 }}>
+        {stats.map(m=>(
+          <div key={m.label} style={{ background:m.bg, borderRadius:14, padding:"14px 16px", border:"1px solid rgba(30,26,52,0.04)" }}>
+            <div style={{ fontSize:11, color:"var(--balance-purple)", marginBottom:6, fontWeight:500, opacity:0.7 }}>{m.label}</div>
+            <div style={{ fontSize:28, fontWeight:700, color:m.accent, letterSpacing:"-0.03em", lineHeight:1 }}>{m.val}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Column headers */}
+      <div style={{ display:"grid", gridTemplateColumns:"210px 1fr 1fr", gap:10, padding:"4px 14px 8px 14px" }}>
+        {["Proyecto · Owner","Áreas Notion · MCP", tab==="skills"?"Skills · 🔁 compartida":"Knowledge Files"].map(h=>(
+          <span key={h} style={{ fontSize:10, color:"var(--balance-purple)", letterSpacing:"0.04em", opacity:0.5, fontWeight:500 }}>{h.toUpperCase()}</span>
+        ))}
+      </div>
+
+      {/* Sections */}
+      {visible.map(sec=>(
+        <div key={sec.cat}>
+          <div style={{ fontSize:10, color:"var(--balance-purple)", letterSpacing:"0.08em", padding:"14px 0 6px 0", borderBottom:"1px solid rgba(30,26,52,0.06)", marginBottom:6, fontWeight:600, opacity:0.5 }}>
+            {sec.label.toUpperCase()}
+          </div>
+          {sec.projects.map(p=><ProjectCard key={p.id} p={p} onUpdate={upP} tab={tab} />)}
+        </div>
+      ))}
+
+      {/* Footer */}
+      <div style={{ marginTop:16, padding:"12px 16px", borderRadius:12, border:"1px solid rgba(30,26,52,0.06)", fontSize:11, color:"var(--balance-purple)", background:"rgba(255,255,255,0.3)", opacity:0.7 }}>
+        <div style={{ marginBottom:4 }}>
+          {tab==="skills"
+            ? "Todas las skills en ❌ Por crear — márcalas ✅ cuando existan en Claude · Clic en fila para expandir y editar · 🔁 = compartida"
+            : "Brand DNA Master File → se sube a P2, P3, P4, P5, P6 · KB files en .md · máx 5-8 por proyecto · máx 15K palabras · sync 48h"}
+        </div>
+        <div style={{ fontSize:10, opacity:0.7 }}>
+          Skills compartidas 🔁: vau-hook-generator (P3+P4+P6) · vau-producto-script (P3+P6) · vau-caption-tiktok (P3+P6) · vau-web-popup (P3+P4)
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
