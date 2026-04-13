@@ -9,7 +9,7 @@ const pool = new Pool({
   ssl: process.env.DATABASE_URL?.includes("railway") || process.env.DATABASE_URL?.includes("sslmode") ? { rejectUnauthorized: false } : undefined,
 });
 
-// Write key — set this in Railway Variables. Without a valid key, POST requests fail.
+// Write key â set this in Railway Variables. Without a valid key, POST requests fail.
 const WRITE_KEY = process.env.WRITE_KEY || "CHANGE_ME_IN_RAILWAY";
 
 const app = express();
@@ -46,19 +46,44 @@ async function getDashboardHtml() {
     'const API_URL = "";',
     'const API_URL = "";\nwindow.__VAU_API_URL = window.location.origin;'
   );
-  // Also overwrite the const via a wrapper trick — simplest: replace the empty string line
+  // Also overwrite the const via a wrapper trick â simplest: replace the empty string line
   html = html.replace(
     'const API_URL = "";\nwindow.__VAU_API_URL = window.location.origin;',
     'const API_URL = window.location.origin;'
   );
-  // Auto-inject write key so every team member has edit access without manual config
+  // Auto-inject write key + force API-first + polling so team members always see fresh data
   const autoKey = process.env.AUTO_WRITE_KEY || process.env.WRITE_KEY;
-  if (autoKey) {
-    html = html.replace(
-      '</head>',
-      `<script>try{localStorage.setItem('vau_dash_write_key',${JSON.stringify(autoKey)})}catch(e){}</script></head>`
-    );
+  const injectedScript = `
+<script>
+try {
+  // Auto-grant write access to every visitor
+  ${autoKey ? `localStorage.setItem('vau_dash_write_key', ${JSON.stringify(autoKey)});` : ''}
+  // Clear stale local cache so the API is always the source of truth on load
+  localStorage.removeItem('vau_dash_v8');
+  localStorage.removeItem('vau_dash_v7');
+  localStorage.removeItem('vau_dash_v6');
+} catch(e){}
+// Live sync: reload page if server data was updated by someone else
+(function(){
+  var lastSeen = null;
+  async function check() {
+    try {
+      var r = await fetch('/api/data', { cache: 'no-store' });
+      var j = await r.json();
+      if (j && j.updated_at) {
+        if (lastSeen && j.updated_at !== lastSeen) { location.reload(); return; }
+        lastSeen = j.updated_at;
+      }
+    } catch(e){}
   }
+  setTimeout(check, 3000);
+  setInterval(check, 30000);
+  document.addEventListener('visibilitychange', function(){
+    if (document.visibilityState === 'visible') check();
+  });
+})();
+</script>`;
+  html = html.replace('</head>', injectedScript + '</head>');
   CACHED_HTML = html;
   CACHED_AT = now;
   return html;
