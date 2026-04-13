@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Sleep Supplements ICP — Market Intelligence · VAU Nutrition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Capriola&family=Jost:wght@300;400;500;600;700&family=Caveat:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+/* ======= VAU BRAND SYSTEM =======
+   Root Cream #f0ebdd  · Soul Purple #1e1a34 · Balance Purple #606085
+   Body Blue  #62bfbd  · Vau Green    #44725d · Spirit Green   #dbdf34
+   Headings: Capriola · Body: Jost · Flourish: Caveat (script fallback)
+   Rule: teal/green/lime NEVER as bg — only accents / data viz.
+================================== */
+:root{
+  --cream:#f0ebdd;
+  --cream-soft:#f7f3e8;
+  --ink:#1e1a34;
+  --ink-soft:#606085;
+  --teal:#62bfbd;
+  --vau:#44725d;
+  --lime:#dbdf34;
+  --paper:#faf7ee;
+  --line:rgba(30,26,52,.14);
+  --line-dash:rgba(30,26,52,.28);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:var(--cream)}
+body{
+  font-family:'Jost',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  color:var(--ink);
+  line-height:1.55;
+  font-weight:400;
+  letter-spacing:.005em;
+  padding:32px 24px 48px;
+  position:relative;
+  overflow-x:hidden;
+}
+/* Soft radial blobs — VAU "graphic universe" */
+body::before,body::after{
+  content:"";position:fixed;border-radius:50%;filter:blur(90px);opacity:.45;z-index:0;pointer-events:none;
+}
+body::before{width:520px;height:520px;background:radial-gradient(circle,var(--teal) 0%,transparent 70%);top:-120px;right:-140px}
+body::after{width:480px;height:480px;background:radial-gradient(circle,var(--lime) 0%,transparent 70%);bottom:-160px;left:-160px}
+.wrap{max-width:1400px;margin:0 auto;position:relative;z-index:1}
+
+/* ========= HEADER ========= */
+.header{
+  padding:40px 40px 44px;
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:28px;
+  margin-bottom:28px;
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 2px 0 rgba(30,26,52,.04);
+}
+.header::after{
+  content:"";position:absolute;inset:0;opacity:.18;pointer-events:none;
+  background-image:radial-gradient(var(--ink-soft) .8px,transparent .9px);
+  background-size:14px 14px;mask-image:radial-gradient(ellipse at 85% 30%,#000 0%,transparent 55%);
+  -webkit-mask-image:radial-gradient(ellipse at 85% 30%,#000 0%,transparent 55%);
+}
+.wordmark{
+  font-family:'Capriola',serif;font-size:13px;letter-spacing:.42em;
+  text-transform:lowercase;color:var(--vau);display:flex;align-items:center;gap:10px;margin-bottom:16px;
+}
+.wordmark::before{content:"";width:28px;height:28px;border-radius:50%;background:var(--lime);display:inline-block;box-shadow:inset 0 0 0 3px var(--cream)}
+h1{
+  font-family:'Capriola',serif;font-size:44px;font-weight:400;line-height:1.1;
+  letter-spacing:-.015em;color:var(--ink);max-width:880px;
+}
+h1 em{font-family:'Caveat',cursive;font-style:normal;color:var(--vau);font-weight:600;font-size:1.08em;padding:0 .08em}
+.subtitle{
+  color:var(--ink-soft);font-size:14px;margin-top:14px;max-width:780px;
+  font-weight:300;letter-spacing:.01em;
+}
+.tagline{
+  display:inline-block;margin-top:20px;padding:6px 16px;
+  border:1px dashed var(--line-dash);border-radius:999px;
+  font-family:'Caveat',cursive;font-size:18px;color:var(--vau);
+}
+
+/* ========= SECTIONS / CARDS ========= */
+.section{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:28px 30px;
+  margin-bottom:20px;
+  position:relative;
+}
+.section.dashed{border-style:dashed;border-color:var(--line-dash)}
+h2{
+  font-family:'Capriola',serif;font-size:22px;font-weight:400;
+  margin:0 0 18px;color:var(--ink);
+  display:flex;align-items:center;gap:12px;letter-spacing:-.005em;
+}
+h2::before{
+  content:"";width:10px;height:10px;border-radius:50%;background:var(--vau);flex-shrink:0;
+}
+h2 .badge{
+  font-family:'Jost',sans-serif;
+  font-size:10px;background:var(--ink);color:var(--cream);
+  padding:4px 10px;border-radius:999px;font-weight:500;letter-spacing:.12em;
+  text-transform:uppercase;
+}
+h2 .badge.hot{background:var(--vau);color:var(--lime)}
+h2 .badge.ok{background:var(--teal);color:var(--ink)}
+h2 .badge.lime{background:var(--lime);color:var(--ink)}
+
+/* ========= GRIDS ========= */
+.grid{display:grid;gap:18px}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.two-col{grid-template-columns:1fr 1fr}
+.three-col{grid-template-columns:1fr 1fr 1fr}
+@media(max-width:900px){.two-col,.three-col{grid-template-columns:1fr}}
+
+/* ========= KPIs ========= */
+.kpi{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:22px 22px 20px;
+  position:relative;overflow:hidden;
+}
+.kpi::before{
+  content:"";position:absolute;top:0;left:22px;right:22px;height:3px;
+  background:var(--vau);border-radius:0 0 3px 3px;
+}
+.kpi.hot::before{background:var(--teal)}
+.kpi.accent::before{background:var(--lime)}
+.kpi .label{
+  font-size:10px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.18em;
+  margin-bottom:10px;font-weight:500;
+}
+.kpi .value{
+  font-family:'Capriola',serif;font-size:32px;font-weight:400;
+  color:var(--ink);letter-spacing:-.01em;line-height:1;
+}
+.kpi .sub{font-size:12px;color:var(--ink-soft);margin-top:8px;font-weight:400}
+
+/* ========= CHARTS ========= */
+.chart-container{position:relative;height:320px}
+.chart-container.tall{height:400px}
+
+/* ========= TABLES ========= */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{
+  background:transparent;color:var(--ink-soft);text-transform:uppercase;font-size:10px;
+  letter-spacing:.15em;padding:12px 10px;text-align:left;
+  border-bottom:1px dashed var(--line-dash);font-weight:600;
+}
+td{padding:14px 10px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink)}
+tr:last-child td{border-bottom:0}
+tr:hover td{background:rgba(98,191,189,.08)}
+
+/* ========= TAGS & PILLS ========= */
+.tag{
+  display:inline-block;background:rgba(98,191,189,.18);color:var(--vau);
+  font-size:10px;padding:3px 10px;border-radius:999px;margin:1px;
+  font-weight:600;letter-spacing:.04em;
+}
+.tag.hot{background:rgba(30,26,52,.08);color:var(--ink)}
+.tag.green{background:var(--lime);color:var(--ink)}
+.verdict{display:inline-block;padding:5px 12px;border-radius:999px;font-size:11px;font-weight:600;letter-spacing:.02em}
+.v-win{background:rgba(68,114,93,.15);color:var(--vau)}
+.v-opp{background:var(--lime);color:var(--ink)}
+.v-mid{background:rgba(96,96,133,.15);color:var(--ink-soft)}
+.v-no{background:rgba(30,26,52,.08);color:var(--ink-soft)}
+
+/* ========= INSIGHT BOXES ========= */
+.insight-box{
+  background:var(--cream-soft);
+  border:1px solid var(--line);
+  border-left:4px solid var(--vau);
+  border-radius:16px;
+  padding:18px 22px;margin-bottom:12px;
+}
+.insight-box.hot{border-left-color:var(--teal)}
+.insight-box.accent{border-left-color:var(--lime);background:rgba(219,223,52,.12)}
+.insight-box h3{
+  font-family:'Capriola',serif;color:var(--ink);font-size:16px;margin-bottom:8px;
+  font-weight:400;letter-spacing:-.005em;
+}
+.insight-box p{color:var(--ink);font-size:13px;font-weight:400}
+.insight-box p b{color:var(--vau);font-weight:600}
+
+.pill{
+  display:inline-block;padding:4px 12px;background:var(--paper);
+  border:1px solid var(--line-dash);color:var(--vau);
+  border-radius:999px;font-size:11px;font-weight:500;margin:2px;
+}
+.hook{font-family:'Caveat',cursive;color:var(--vau);font-weight:500;font-size:17px;line-height:1.35}
+
+/* ========= RECS ========= */
+.rec-grid{display:grid;grid-template-columns:auto 1fr;gap:14px 20px;margin-top:14px}
+.rec-num{
+  background:var(--ink);color:var(--lime);
+  width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Capriola',serif;font-weight:400;font-size:15px;flex-shrink:0;
+}
+.rec-text{color:var(--ink);padding-top:5px;font-size:14px;line-height:1.55}
+.rec-text strong{color:var(--vau);font-family:'Capriola',serif;font-weight:400;letter-spacing:.005em}
+
+/* ========= MISC ========= */
+a{color:var(--vau);text-decoration:none;border-bottom:1px dashed var(--line-dash)}
+a:hover{color:var(--ink)}
+.micro{font-size:12px;color:var(--ink-soft);margin-top:12px;font-weight:300;line-height:1.5}
+.micro b{color:var(--ink);font-weight:500}
+.product-name{font-weight:500;color:var(--ink);margin-bottom:4px;display:block;font-size:13px}
+.brand-tag{color:var(--vau);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.stat-row{display:flex;gap:14px;font-size:11px;color:var(--ink-soft);margin-top:6px;flex-wrap:wrap}
+.stat-row b{color:var(--ink);font-weight:600}
+code{font-family:'Jost',monospace;background:var(--lime);padding:1px 6px;border-radius:4px;font-size:11px;color:var(--ink)}
+
+/* ========= ACTIONS PANEL (recommendations) ========= */
+.actions{
+  background:var(--ink);
+  color:var(--cream);
+  border:1px solid var(--ink);
+  border-radius:28px;
+  padding:32px 36px;
+  position:relative;overflow:hidden;
+}
+.actions::before{
+  content:"";position:absolute;inset:0;opacity:.22;pointer-events:none;
+  background-image:radial-gradient(var(--lime) 1px,transparent 1.2px);
+  background-size:18px 18px;
+  mask-image:radial-gradient(ellipse at 90% 110%,#000 0%,transparent 55%);
+  -webkit-mask-image:radial-gradient(ellipse at 90% 110%,#000 0%,transparent 55%);
+}
+.actions h2{color:var(--cream);position:relative}
+.actions h2::before{background:var(--lime)}
+.actions .rec-text{color:var(--cream)}
+.actions .rec-text strong{color:var(--lime)}
+.actions .rec-num{background:var(--lime);color:var(--ink)}
+
+footer{
+  text-align:center;color:var(--ink-soft);font-size:11px;padding:28px 20px 8px;
+  margin-top:24px;letter-spacing:.08em;text-transform:uppercase;font-weight:500;
+}
+footer span{font-family:'Caveat',cursive;text-transform:none;font-size:16px;letter-spacing:0;color:var(--vau)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="header">
+  <div class="wordmark">vau · nutrition</div>
+  <h1>Sleep Supplements ICP <em>— market intelligence</em></h1>
+  <div class="subtitle">Google Trends (US · 12m) entrelazado con Fastmoss (TikTok Shop · 3.000 productos · 76 videos top) · Abril 2026.</div>
+  <div class="tagline">a better day begins at night.</div>
+</div>
+
+<!-- HERO KPIs -->
+<div class="grid kpis" style="margin-bottom:20px">
+  <div class="kpi"><div class="label">Productos en el universo</div><div class="value" id="kpi-prods"></div><div class="sub">Health · Sleep · US</div></div>
+  <div class="kpi"><div class="label">GMV total acumulado</div><div class="value" id="kpi-gmv"></div><div class="sub" id="kpi-gmv7"></div></div>
+  <div class="kpi"><div class="label">Unidades vendidas</div><div class="value" id="kpi-units"></div><div class="sub">TikTok Shop · histórico</div></div>
+  <div class="kpi"><div class="label">Precio promedio USD</div><div class="value" id="kpi-price"></div><div class="sub">Mediana de categoría</div></div>
+  <div class="kpi hot"><div class="label">Claim "Melatonin-Free"</div><div class="value" id="kpi-mf"></div><div class="sub" id="kpi-mf-gmv"></div></div>
+  <div class="kpi accent"><div class="label">Brands · stores únicas</div><div class="value" id="kpi-brands"></div><div class="sub">Mercado hiper-fragmentado</div></div>
+</div>
+
+<!-- HALLAZGOS CLAVE -->
+<div class="section">
+<h2>Hallazgos clave <span class="badge hot">Top 3</span></h2>
+<div class="grid three-col">
+  <div class="insight-box">
+    <h3>1 · El ritual gana al caramelo</h3>
+    <p>226 powders generan <b>$48M GMV</b> frente a 811 gummies que hacen $20M. Cada powder mueve <b>2.4× más GMV</b> que cada gummy. Nello solo hace $43.7M con 8 SKUs.</p>
+  </div>
+  <div class="insight-box hot">
+    <h3>2 · "Melatonin-Free" es claim, no keyword</h3>
+    <p>0 búsquedas en Google Trends, pero <b>$13.9M GMV</b> validados en Fastmoss. LullaBites vende $11.7M con ese único USP. Úsalo en packaging y hook de video — no en SEO.</p>
+  </div>
+  <div class="insight-box accent">
+    <h3>3 · Un stack que el cuerpo recuerda</h3>
+    <p><b>Mg glycinate + Ashwagandha KSM-66 + L-Theanine.</b> Los top 3 productos del mercado lo comparten. Rising queries en Google Trends: glycinate +120%, glycine +160%, l-theanine +100%.</p>
+  </div>
+</div>
+</div>
+
+<!-- GOOGLE TRENDS CHART -->
+<div class="section">
+<h2>Demanda de búsqueda <span class="badge">SEO signal · Google Trends · US · 12m</span></h2>
+<div class="chart-container tall"><canvas id="chart-trends"></canvas></div>
+<p class="micro">Índice relativo 0–100. "sleep powder" en <b>breakout (+389%)</b>. "magnesium for sleep" líder absoluto de volumen. "melatonin alternative" y "melatonin-free" sin volumen como keyword — viven mejor como USP que como search intent.</p>
+</div>
+
+<!-- CROSS ANALYSIS -->
+<div class="section dashed">
+<h2>Cross-analysis: Trends × Fastmoss <span class="badge ok">Veredicto</span></h2>
+<table>
+  <thead><tr><th>Keyword · Ángulo</th><th>Trends idx</th><th>Trend 12m</th><th>Fastmoss productos</th><th>Fastmoss GMV</th><th>Top brand</th><th>Veredicto</th></tr></thead>
+  <tbody id="cross-tbody"></tbody>
+</table>
+</div>
+
+<!-- FASTMOSS LANDSCAPE -->
+<div class="grid two-col">
+  <div class="section">
+    <h2>GMV por formato <span class="badge ok">Product strategy</span></h2>
+    <div class="chart-container"><canvas id="chart-formats"></canvas></div>
+    <p class="micro">Powder/Mix tiene menos productos pero mayor GMV agregado y <b>mayor GMV por producto</b>. Formato con barrera de entrada más alta → mejor defensibilidad.</p>
+  </div>
+  <div class="section">
+    <h2>Top 10 brands por GMV <span class="badge">Competition</span></h2>
+    <div class="chart-container"><canvas id="chart-brands"></canvas></div>
+    <p class="micro">Nello domina con $43.7M. LullaBites #2 con un solo SKU ($11.7M). El resto del mercado es <code>10×</code> más pequeño.</p>
+  </div>
+</div>
+
+<!-- INGREDIENT STACKS -->
+<div class="section">
+<h2>Performance por ingrediente <span class="badge lime">Formulation</span></h2>
+<div class="chart-container"><canvas id="chart-ingredients"></canvas></div>
+<p class="micro">Barras teal = # productos (competencia). Línea lima = GMV por producto (eficiencia). Los ingredientes <b>arriba a la derecha</b> — alta eficiencia y no saturados — son las mejores apuestas: Melatonin-Free, Ashwagandha, L-Theanine.</p>
+</div>
+
+<!-- TOP PRODUCTS -->
+<div class="section">
+<h2>Top 10 productos del mercado <span class="badge">Benchmarks</span></h2>
+<table>
+  <thead><tr><th style="width:5%">#</th><th style="width:38%">Producto</th><th>Brand</th><th>Precio</th><th>Formato</th><th>Stack</th><th>GMV total</th><th>Unidades</th><th>GMV 7d</th></tr></thead>
+  <tbody id="top-tbody"></tbody>
+</table>
+</div>
+
+<!-- CREATIVE INTEL -->
+<div class="grid two-col">
+  <div class="section">
+    <h2>Creative hooks ganadores <span class="badge hot">TikTok</span></h2>
+    <div id="hooks-container"></div>
+    <p class="micro" id="video-stats"></p>
+  </div>
+  <div class="section">
+    <h2>Top hashtags <span class="badge">Creator brief</span></h2>
+    <div id="hashtag-cloud" style="line-height:2.8"></div>
+    <p class="micro">Hashtags más frecuentes en los 76 videos con GMV confirmado. Core rotation: <b>#sleep · #magnesium · #cortisol · #insomnia · #fallasleepfast</b>. Evita hashtags de competidores (#lovewellness, #goli, #innerbrightness).</p>
+  </div>
+</div>
+
+<!-- RECOMENDACIONES -->
+<div class="actions">
+<h2>Recomendaciones de portfolio para VAU <span class="badge lime">Action</span></h2>
+<div class="rec-grid">
+  <div class="rec-num">1</div><div class="rec-text"><strong>Formato principal</strong> — powder · drink-mix stick pack. Benchmarks: Nello, MoonBrew, Yesnap. Mayor GMV/producto y breakout en Google Trends.</div>
+  <div class="rec-num">2</div><div class="rec-text"><strong>Stack core</strong> — Mg glycinate + Ashwagandha KSM-66 + L-Theanine. Validado por los 3 top sellers. GABA como cuarto ingrediente premium opcional.</div>
+  <div class="rec-num">3</div><div class="rec-text"><strong>Claim líder</strong> — "Melatonin-Free" en packaging y hook de video. 0 volumen SEO pero $13.9M GMV validado en TikTok Shop.</div>
+  <div class="rec-num">4</div><div class="rec-text"><strong>Posicionamiento narrativo</strong> — "nervous system regulation · cortisol balance" + "melatonin-free" + formato premium. Territorio de restauración, aún sin líder claro.</div>
+  <div class="rec-num">5</div><div class="rec-text"><strong>Price point</strong> — USD $30–40 single pack · $60–70 bundle de 2. Mediana del top 10 performers.</div>
+  <div class="rec-num">6</div><div class="rec-text"><strong>Pilares SEO</strong> — "magnesium for sleep" (hub) + "magnesium glycinate" + "alternative to melatonin" (no "melatonin alternative").</div>
+  <div class="rec-num">7</div><div class="rec-text"><strong>Hooks TikTok</strong> — pain-point parental · graveyard shift · "knocked out" · resultado visible. Evita hooks genéricos tipo "I slept so good". Cluster: vagus nerve + cortisol reset (+90% rising).</div>
+  <div class="rec-num">8</div><div class="rec-text"><strong>Benchmark creative</strong> — video rentable ≥ 1K views y ≥ 2 unidades. Hero creative ≥ 10K views y ≥ 10 unidades. Invertir en creadores con este floor.</div>
+</div>
+</div>
+
+<footer>
+Capturado 2026-04-13 / 04-14 · Fuentes: Google Trends · Fastmoss · VAU Nutrition internal <br><span>your body remembers how.</span>
+</footer>
+</div>
+
+<script>
+const D = {"total_products": 3000, "total_brands": 1886, "total_gmv": 77706606, "total_gmv_7d": 761617, "total_units": 2371312, "avg_price": 32.35, "melatonin_free_count": 215, "melatonin_free_gmv": 13892075, "brands": [{"Store Name": "Nello", "N": 8, "GMV": 43701977, "GMV7": 127902.01}, {"Store Name": "LullaBites", "N": 1, "GMV": 11745142, "GMV7": 148985.58}, {"Store Name": "Goli Nutrition", "N": 6, "GMV": 2971408, "GMV7": 18511.6}, {"Store Name": "Yesnap Health", "N": 5, "GMV": 1825791, "GMV7": 42845.9}, {"Store Name": "Beast Bites Supplements", "N": 1, "GMV": 1763122, "GMV7": 1172.82}, {"Store Name": "The Happiest Hour Drinks", "N": 8, "GMV": 1604027, "GMV7": 3939.47}, {"Store Name": "MoonBrew", "N": 13, "GMV": 1416167, "GMV7": 13477.23}, {"Store Name": "Viyouth US", "N": 10, "GMV": 1238781, "GMV7": 76843.34}, {"Store Name": "Beam", "N": 6, "GMV": 561763, "GMV7": 13792.95}, {"Store Name": "Taste Salud", "N": 4, "GMV": 492698, "GMV7": 3651.8}], "top10": [{"name": "Nello Supercalm Calming Drink Mix with KSM-66 Ashwagandha Vitamin D3 Magnesium & L-Theanin", "brand": "Nello", "price": 33.96, "fmt": "Powder/Mix", "ing": "Magnesium, Ashwagandha, L-Theanine", "gmv": 31644931, "units": 843655, "gmv7": 69000}, {"name": "LullaBites Natural Sleep Gummies - 30 Servings - Sweet Strawberry Stars (Melatonin Free)", "brand": "LullaBites", "price": 30.51, "fmt": "Gummy", "ing": "Melatonin-Free", "gmv": 11745142, "units": 388676, "gmv7": 148985}, {"name": "Nello Supercalm Best Selling Flavors Bundle (2-Pack): KSM-66 Ashwagandha Calming Drink Mix", "brand": "Nello", "price": 59.92, "fmt": "Powder/Mix", "ing": "Magnesium, Ashwagandha, L-Theanine", "gmv": 4779054, "units": 81828, "gmv7": 7843}, {"name": "Nello Supercalm Tub (2-Pack): Calming Drink Mix with KSM-66 Ashwagandha, Vitamin D3, Mg", "brand": "Nello", "price": 67.42, "fmt": "Powder/Mix", "ing": "Magnesium, Ashwagandha, L-Theanine", "gmv": 3270978, "units": 49578, "gmv7": 14319}, {"name": "Supercalm Best Selling Flavors Bundle Tubs (2-Pack): KSM-66 Ashwagandha Calming Drink Mix", "brand": "Nello", "price": 67.42, "fmt": "Powder/Mix", "ing": "Magnesium, Ashwagandha, L-Theanine", "gmv": 1829914, "units": 27582, "gmv7": 8793}, {"name": "Nello Supercalm Calming Drink Mix with KSM-66 Ashwagandha Vitamin D3 Magnesium & L-Theanin", "brand": "Nello", "price": 38.21, "fmt": "Powder/Mix", "ing": "Magnesium, Ashwagandha, L-Theanine", "gmv": 1802988, "units": 44215, "gmv7": 15818}, {"name": "Valerian Infused Sleep & Nighttime Recovery Gummies — Beast Bites (NSF Certified for Sport)", "brand": "Beast Bites Supplements", "price": 9.99, "fmt": "Gummy", "ing": "Valerian", "gmv": 1763122, "units": 44979, "gmv7": 1172}, {"name": "Goli Dreamy Sleep Gummy — Melatonin, Vitamin D, Magnesium, Lemon Balm, Gelatin-Free", "brand": "Goli Nutrition", "price": 14.96, "fmt": "Gummy", "ing": "Melatonin, Magnesium", "gmv": 1637556, "units": 114739, "gmv7": 5815}, {"name": "Yesnap MAGICRELAX Calming Sparkling Mix · 8-in-1 Mg KSM-66 Ashwagandha Saffron", "brand": "Yesnap Health", "price": 3.5, "fmt": "Powder/Mix", "ing": "Magnesium, Ashwagandha, L-Theanine, GABA", "gmv": 1346968, "units": 59405, "gmv7": 8702}, {"name": "Viyouth 1000mg Magnesium Complex — 10 Elemental Mg Complex & Zinc for Calming Sleep", "brand": "Viyouth US", "price": 19.99, "fmt": "Capsule/Tablet", "ing": "Magnesium, Mg-Glycinate", "gmv": 1188513, "units": 70964, "gmv7": 75222}], "formats": [{"Format": "Powder/Mix", "N": 226, "GMV": 47990493}, {"Format": "Gummy", "N": 811, "GMV": 19820660}, {"Format": "Other", "N": 778, "GMV": 5651604}, {"Format": "Capsule/Tablet", "N": 931, "GMV": 2875530}, {"Format": "Liquid/Drops", "N": 165, "GMV": 924954}, {"Format": "Drink/Tea", "N": 54, "GMV": 284301}, {"Format": "Spray", "N": 11, "GMV": 99711}, {"Format": "Patch", "N": 24, "GMV": 59353}], "ingredients": [{"ing": "Magnesium", "n": 1338, "gmv": 57727005, "gmv_prod": 43144}, {"ing": "L-Theanine", "n": 487, "gmv": 49099937, "gmv_prod": 100821}, {"ing": "Ashwagandha", "n": 482, "gmv": 47797038, "gmv_prod": 99163}, {"ing": "Melatonin", "n": 853, "gmv": 20007928, "gmv_prod": 23455}, {"ing": "Melatonin-Free", "n": 215, "gmv": 13892075, "gmv_prod": 64614}, {"ing": "Mg-Glycinate", "n": 538, "gmv": 2557175, "gmv_prod": 4753}, {"ing": "Chamomile", "n": 141, "gmv": 2447473, "gmv_prod": 17357}, {"ing": "GABA", "n": 146, "gmv": 2399620, "gmv_prod": 16435}, {"ing": "Valerian", "n": 128, "gmv": 1945123, "gmv_prod": 15196}, {"ing": "Glycine", "n": 19, "gmv": 81105, "gmv_prod": 4268}], "weekly": [["Apr 13, 2025", 0, 5, 57, 9, 5], ["Apr 20, 2025", 0, 4, 53, 10, 7], ["Apr 27, 2025", 0, 3, 53, 9, 6], ["May 4, 2025", 0, 4, 51, 8, 6], ["May 11, 2025", 0, 4, 55, 9, 5], ["May 18, 2025", 1, 4, 54, 8, 5], ["May 25, 2025", 0, 4, 55, 10, 4], ["Jun 1, 2025", 0, 5, 58, 9, 5], ["Jun 8, 2025", 0, 5, 52, 10, 5], ["Jun 15, 2025", 1, 5, 58, 9, 5], ["Jun 22, 2025", 0, 5, 59, 9, 4], ["Jun 29, 2025", 0, 5, 56, 10, 5], ["Jul 6, 2025", 0, 5, 63, 12, 4], ["Jul 13, 2025", 0, 6, 66, 13, 5], ["Jul 20, 2025", 1, 5, 66, 15, 6], ["Jul 27, 2025", 1, 6, 96, 17, 6], ["Aug 3, 2025", 1, 5, 71, 14, 5], ["Aug 10, 2025", 1, 5, 67, 14, 6], ["Aug 17, 2025", 1, 5, 63, 13, 6], ["Aug 24, 2025", 1, 5, 66, 14, 6], ["Aug 31, 2025", 1, 5, 68, 14, 7], ["Sep 7, 2025", 1, 5, 61, 13, 6], ["Sep 14, 2025", 1, 5, 68, 14, 7], ["Sep 21, 2025", 1, 6, 70, 14, 7], ["Sep 28, 2025", 1, 6, 70, 15, 8], ["Oct 5, 2025", 1, 5, 70, 14, 8], ["Oct 12, 2025", 1, 5, 65, 14, 8], ["Oct 19, 2025", 1, 5, 66, 14, 8], ["Oct 26, 2025", 1, 6, 60, 13, 7], ["Dec 21, 2025", 1, 5, 60, 14, 8], ["Dec 28, 2025", 1, 6, 83, 19, 11], ["Jan 4, 2026", 2, 8, 100, 20, 10], ["Jan 11, 2026", 1, 5, 91, 17, 11], ["Jan 18, 2026", 1, 6, 85, 18, 12], ["Jan 25, 2026", 1, 5, 82, 17, 13], ["Feb 1, 2026", 2, 3, 78, 19, 15], ["Feb 8, 2026", 2, 6, 74, 18, 13], ["Feb 15, 2026", 1, 5, 82, 19, 15], ["Feb 22, 2026", 1, 5, 83, 21, 15], ["Mar 1, 2026", 2, 5, 94, 32, 16], ["Mar 8, 2026", 3, 5, 100, 28, 13], ["Mar 15, 2026", 2, 5, 92, 34, 14], ["Mar 22, 2026", 2, 8, 93, 51, 14], ["Mar 29, 2026", 1, 7, 77, 42, 9], ["Apr 5, 2026", 1, 10, 80, 41, 9], ["Apr 12, 2026", 2, 10, 82, 44, 8]], "hashtags": [["sleep", 11], ["magnesium", 8], ["tiktokshopcreatorpicks", 7], ["greenish", 4], ["health", 4], ["sleepgummies", 3], ["cortisol", 3], ["lovewellness", 3], ["bettersleep", 3], ["tiktokshop", 3], ["sleepsupplement", 3], ["selfcare", 3], ["sleepsupport", 3], ["fyp", 3], ["insomnia", 2], ["calmdrink", 2], ["wellness", 2], ["fallasleepfast", 2], ["magnesiumdeficiency", 2], ["tiktokshopfinds", 2]], "video_avg_views": 13856, "video_avg_gmv": 518.88, "top_videos": [{"Video Title": "She was knockeddd 😂😴 #lullabites #sleepgummies #insomnia #graveyardshift", "Video Views": 44300, "Video Units Sold": 106, "Video GMV": 13603.06, "Product Title": "LullaBites Natural Sleep Gummies - Sweet Strawberry Stars (Melatonin Free)"}, {"Video Title": "When mommy just needs a moment … thanks to supercalm #nellosupercalm #calmdrink #chillmom #momlife", "Video Views": 287900, "Video Units Sold": 132, "Video GMV": 7641.0, "Product Title": "Nello Supercalm Calming Drink Mix with KSM-66 Ashwagandha"}, {"Video Title": "This Advice Can Change Your Life Tonight 🚨😳 #taller #growthspurt #supplementsthatwork", "Video Views": 239400, "Video Units Sold": 68, "Video GMV": 3679.08, "Product Title": "Heightener Height Growth Sleep Gummies"}, {"Video Title": "NYT Wordle & Connections 4/6. #wordle #connections #nytgames", "Video Views": 15000, "Video Units Sold": 12, "Video GMV": 1808.11, "Product Title": "MoonBrew Sleepy Hot Cocoa — Melatonin-Free Magnesium Sleep Drink"}, {"Video Title": "I slept sooooo good with this #wellness #fallasleepfast #naturalsleepaid #lovewellness", "Video Views": 190100, "Video Units Sold": 8, "Video GMV": 1226.02, "Product Title": "Love Wellness Sleep* Quick Melt Strips 2 Pack"}, {"Video Title": "CRAZY DEALS‼️ #springglowup #springsale #tiktokshopspringsale", "Video Views": 1075, "Video Units Sold": 3, "Video GMV": 858.0, "Product Title": "STASIS Day & Night Set — Energy Focus + Calm Sleep Supplements"}]};
+
+const fmt = n => n.toLocaleString('en-US');
+const $ = (id,v)=>document.getElementById(id).textContent=v;
+const fmtMoney = n => '$' + (n>=1e6 ? (n/1e6).toFixed(1)+'M' : n>=1e3 ? (n/1e3).toFixed(0)+'K' : n);
+
+// KPIs
+$('kpi-prods', fmt(D.total_products));
+$('kpi-gmv', fmtMoney(D.total_gmv));
+$('kpi-gmv7', fmtMoney(D.total_gmv_7d) + ' últimos 7 días');
+$('kpi-units', fmt(D.total_units));
+$('kpi-price', '$'+D.avg_price);
+$('kpi-mf', D.melatonin_free_count + ' SKUs');
+$('kpi-mf-gmv', fmtMoney(D.melatonin_free_gmv) + ' GMV validado');
+$('kpi-brands', fmt(D.total_brands));
+
+// VAU palette for charts
+const VAU = {
+  ink:'#1e1a34', inkSoft:'#606085',
+  teal:'#62bfbd', vau:'#44725d', lime:'#dbdf34',
+  cream:'#f0ebdd', paper:'#faf7ee',
+  grid:'rgba(30,26,52,.10)'
+};
+const C = [VAU.vau, VAU.teal, VAU.ink, VAU.lime, VAU.inkSoft, '#8fa37a'];
+Chart.defaults.color = VAU.inkSoft;
+Chart.defaults.borderColor = VAU.grid;
+Chart.defaults.font.family = "'Jost',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif";
+Chart.defaults.font.size = 11;
+
+// Trends chart
+const labels = D.weekly.map(r=>r[0]);
+const names = ['melatonin alternative','natural sleep aid','magnesium for sleep','sleep powder','nervous system regulation'];
+new Chart(document.getElementById('chart-trends'), {
+  type:'line',
+  data:{labels, datasets: names.map((n,i)=>({
+    label:n, data:D.weekly.map(r=>r[i+1]),
+    borderColor:C[i], backgroundColor:C[i]+'22',
+    borderWidth: i===2?3:2, tension:0.35, pointRadius:0, pointHoverRadius:5
+  }))},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'top',labels:{usePointStyle:true,boxWidth:8,color:VAU.ink}}},
+    scales:{y:{beginAtZero:true,max:100,grid:{color:VAU.grid}},x:{grid:{display:false},ticks:{maxTicksLimit:8}}}
+  }
+});
+
+// Formats chart (doughnut)
+new Chart(document.getElementById('chart-formats'),{
+  type:'doughnut',
+  data:{labels:D.formats.map(r=>r.Format),
+    datasets:[{data:D.formats.map(r=>r.GMV),
+      backgroundColor:[VAU.vau,VAU.teal,VAU.inkSoft,VAU.lime,'#8fa37a','#b7b7c2','#c9c9d0','#dcdce0'],
+      borderColor:VAU.paper, borderWidth:2}]},
+  options:{responsive:true,maintainAspectRatio:false,cutout:'62%',
+    plugins:{legend:{position:'right',labels:{usePointStyle:true,boxWidth:10,color:VAU.ink,font:{size:12}}},
+      tooltip:{callbacks:{label:ctx=>ctx.label+': '+fmtMoney(ctx.parsed)}}}
+  }
+});
+
+// Brands chart
+new Chart(document.getElementById('chart-brands'),{
+  type:'bar',
+  data:{labels:D.brands.map(r=>r['Store Name']),
+    datasets:[{data:D.brands.map(r=>r.GMV),backgroundColor:VAU.vau,borderRadius:6}]},
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>fmtMoney(ctx.parsed.x)}}},
+    scales:{x:{grid:{color:VAU.grid},ticks:{callback:v=>fmtMoney(v)}},y:{grid:{display:false}}}
+  }
+});
+
+// Ingredients combo
+new Chart(document.getElementById('chart-ingredients'),{
+  type:'bar',
+  data:{labels:D.ingredients.map(r=>r.ing),
+    datasets:[
+      {type:'bar',label:'# Productos',data:D.ingredients.map(r=>r.n),backgroundColor:VAU.teal,borderRadius:6,yAxisID:'y'},
+      {type:'line',label:'GMV por producto ($)',data:D.ingredients.map(r=>r.gmv_prod),borderColor:VAU.vau,backgroundColor:VAU.lime+'55',borderWidth:3,tension:0.35,pointRadius:4,pointBackgroundColor:VAU.lime,pointBorderColor:VAU.vau,yAxisID:'y1'}
+    ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'top',labels:{usePointStyle:true,boxWidth:8,color:VAU.ink}}},
+    scales:{
+      y:{position:'left',grid:{color:VAU.grid},title:{display:true,text:'# Productos',color:VAU.inkSoft}},
+      y1:{position:'right',grid:{display:false},title:{display:true,text:'GMV/producto ($)',color:VAU.inkSoft},ticks:{callback:v=>fmtMoney(v)}},
+      x:{grid:{display:false}}
+    }
+  }
+});
+
+// Cross tbody
+const cross = [
+  ['magnesium for sleep',70,'+44% ↑',D.ingredients.find(i=>i.ing=='Magnesium').n,D.ingredients.find(i=>i.ing=='Magnesium').gmv,'Nello','<span class="verdict v-win">✓ DOBLE HIT</span>'],
+  ['melatonin-free',0,'Sin data',D.melatonin_free_count,D.melatonin_free_gmv,'LullaBites','<span class="verdict v-opp">★ OPORTUNIDAD OCULTA</span>'],
+  ['sleep powder',16,'+389% ↑',D.formats.find(f=>f.Format=='Powder/Mix').N,D.formats.find(f=>f.Format=='Powder/Mix').GMV,'Nello','<span class="verdict v-win">✓ BREAKOUT</span>'],
+  ['natural sleep aid',5,'+100% 2 sem','N/A','N/A','Juna · Moonbrew','<span class="verdict v-mid">◐ TOP-FUNNEL</span>'],
+  ['nervous system · vagus',8,'+60% / +90%',D.ingredients.find(i=>i.ing=='Ashwagandha').n,D.ingredients.find(i=>i.ing=='Ashwagandha').gmv,'Nello · Yesnap','<span class="verdict v-mid">◐ NARRATIVA</span>'],
+  ['magnesium glycinate','N/A','+120% rising',D.ingredients.find(i=>i.ing=='Mg-Glycinate').n,D.ingredients.find(i=>i.ing=='Mg-Glycinate').gmv,'Goli · Viyouth','<span class="verdict v-no">○ SATURADO</span>']
+];
+document.getElementById('cross-tbody').innerHTML = cross.map(r=>`<tr>
+  <td><b>${r[0]}</b></td><td>${r[1]}</td><td>${r[2]}</td>
+  <td>${typeof r[3]==='number'?fmt(r[3]):r[3]}</td>
+  <td>${typeof r[4]==='number'?fmtMoney(r[4]):r[4]}</td>
+  <td>${r[5]}</td><td>${r[6]}</td></tr>`).join('');
+
+// Top products
+document.getElementById('top-tbody').innerHTML = D.top10.map((p,i)=>{
+  const ingTags = p.ing.split(', ').map(t=>`<span class="tag ${t==='Melatonin-Free'?'green':t==='Melatonin'?'hot':''}">${t}</span>`).join('');
+  return `<tr><td>${i+1}</td><td><span class="product-name">${p.name}</span></td>
+    <td><span class="brand-tag">${p.brand}</span></td><td>$${p.price}</td>
+    <td><span class="tag">${p.fmt}</span></td><td>${ingTags}</td>
+    <td><b>${fmtMoney(p.gmv)}</b></td><td>${fmt(p.units)}</td>
+    <td>${fmtMoney(p.gmv7)}</td></tr>`;
+}).join('');
+
+// Hooks
+const hooks = D.top_videos.slice(0,6).map(v=>{
+  const title = v['Video Title'] || '(video sin texto — vende por producto)';
+  return `<div class="insight-box" style="padding:14px 18px;margin-bottom:10px">
+    <div class="hook">"${title.substring(0,140)}${title.length>140?'…':''}"</div>
+    <div class="stat-row" style="margin-top:8px">
+      <span>Views <b>${fmt(v['Video Views'])}</b></span>
+      <span>Units <b>${fmt(v['Video Units Sold'])}</b></span>
+      <span>GMV <b>$${v['Video GMV']}</b></span>
+    </div>
+    <div style="margin-top:6px;font-size:11px;color:var(--ink-soft)">${(v['Product Title']||'').substring(0,80)}</div>
+  </div>`;
+}).join('');
+document.getElementById('hooks-container').innerHTML = hooks;
+$('video-stats', `Benchmark dataset · ${fmt(D.video_avg_views)} views promedio · $${D.video_avg_gmv} GMV promedio por video.`);
+
+// Hashtag cloud
+const maxH = D.hashtags[0][1];
+document.getElementById('hashtag-cloud').innerHTML = D.hashtags.map(([tag,cnt])=>{
+  const size = 12 + (cnt/maxH)*14;
+  const core = ['sleep','magnesium','cortisol','insomnia','fallasleepfast','bettersleep','sleepsupplement','magnesiumglycinate','stressrelief','sleepsupport'];
+  const cls = core.includes(tag)?'pill':'';
+  return `<span class="${cls}" style="font-size:${size}px;margin:3px;display:inline-block">#${tag} <small style="color:var(--ink-soft);font-size:.75em">(${cnt})</small></span>`;
+}).join(' ');
+</script>
+</body>
+</html>
