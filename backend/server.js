@@ -9,14 +9,12 @@ const pool = new Pool({
   ssl: process.env.DATABASE_URL?.includes("railway") || process.env.DATABASE_URL?.includes("sslmode") ? { rejectUnauthorized: false } : undefined,
 });
 
-// Write key — set this in Railway Variables. Without a valid key, POST requests fail.
 const WRITE_KEY = process.env.WRITE_KEY || "CHANGE_ME_IN_RAILWAY";
 
 const app = express();
 app.use(cors({ origin: true }));
 app.use(express.json({ limit: "5mb" }));
 
-// Init DB
 async function init() {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS dashboard_state (
@@ -29,8 +27,36 @@ async function init() {
 }
 init().catch(err => { console.error("DB init error:", err); });
 
-app.get("/", (_req, res) => {
-  res.send("VAU Dashboard API — OK. Endpoints: GET /api/data, POST /api/data");
+const RAW_URL = "https://raw.githubusercontent.com/VAUNUTRITION/vau-ai-dashboard/main/index.html";
+let CACHED_HTML = null;
+let CACHED_AT = 0;
+const CACHE_TTL_MS = 5 * 60 * 1000;
+
+async function getDashboardHtml() {
+  const now = Date.now();
+  if (CACHED_HTML && (now - CACHED_AT) < CACHE_TTL_MS) return CACHED_HTML;
+  const r = await fetch(RAW_URL, { cache: "no-store" });
+  if (!r.ok) throw new Error("fetch_failed " + r.status);
+  let html = await r.text();
+  html = html.replace('const API_URL = "";', 'const API_URL = window.location.origin;');
+  CACHED_HTML = html;
+  CACHED_AT = now;
+  return html;
+}
+
+app.get("/", async (_req, res) => {
+  try {
+    const html = await getDashboardHtml();
+    res.set("Content-Type", "text/html; charset=utf-8");
+    res.send(html);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error loading dashboard: " + String(err));
+  }
+});
+
+app.get("/health", (_req, res) => {
+  res.json({ ok: true, api: "VAU Dashboard" });
 });
 
 app.get("/api/data", async (_req, res) => {
@@ -67,4 +93,3 @@ app.post("/api/data", async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`VAU API listening on ${PORT}`));
-
