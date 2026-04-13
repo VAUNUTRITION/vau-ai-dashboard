@@ -9,12 +9,14 @@ const pool = new Pool({
   ssl: process.env.DATABASE_URL?.includes("railway") || process.env.DATABASE_URL?.includes("sslmode") ? { rejectUnauthorized: false } : undefined,
 });
 
+// Write key — set this in Railway Variables. Without a valid key, POST requests fail.
 const WRITE_KEY = process.env.WRITE_KEY || "CHANGE_ME_IN_RAILWAY";
 
 const app = express();
 app.use(cors({ origin: true }));
 app.use(express.json({ limit: "5mb" }));
 
+// Init DB
 async function init() {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS dashboard_state (
@@ -27,10 +29,11 @@ async function init() {
 }
 init().catch(err => { console.error("DB init error:", err); });
 
+// ---- Dashboard HTML served from Railway (fetched from GitHub raw at startup, API_URL injected) ----
 const RAW_URL = "https://raw.githubusercontent.com/VAUNUTRITION/vau-ai-dashboard/main/index.html";
 let CACHED_HTML = null;
 let CACHED_AT = 0;
-const CACHE_TTL_MS = 5 * 60 * 1000;
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5 min
 
 async function getDashboardHtml() {
   const now = Date.now();
@@ -38,7 +41,24 @@ async function getDashboardHtml() {
   const r = await fetch(RAW_URL, { cache: "no-store" });
   if (!r.ok) throw new Error("fetch_failed " + r.status);
   let html = await r.text();
-  html = html.replace('const API_URL = "";', 'const API_URL = window.location.origin;');
+  // Inject Railway URL (self)
+  html = html.replace(
+    'const API_URL = "";',
+    'const API_URL = "";\nwindow.__VAU_API_URL = window.location.origin;'
+  );
+  // Also overwrite the const via a wrapper trick — simplest: replace the empty string line
+  html = html.replace(
+    'const API_URL = "";\nwindow.__VAU_API_URL = window.location.origin;',
+    'const API_URL = window.location.origin;'
+  );
+  // Auto-inject write key so every team member has edit access without manual config
+  const autoKey = process.env.AUTO_WRITE_KEY || process.env.WRITE_KEY;
+  if (autoKey) {
+    html = html.replace(
+      '</head>',
+      `<script>try{localStorage.setItem('vau_dash_write_key',${JSON.stringify(autoKey)})}catch(e){}</script></head>`
+    );
+  }
   CACHED_HTML = html;
   CACHED_AT = now;
   return html;
