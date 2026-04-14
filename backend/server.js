@@ -66,8 +66,9 @@ async function getDashboardHtml() {
   // Auto-grant write access
   if (writeKey) try { origSetItem.call(localStorage, WK, writeKey); } catch(e){}
 
-  // On load: pull DB data into localStorage so app sees it
-  // Uses origSetItem to avoid triggering a POST back to DB
+  // On load: pull DB data into localStorage so app sees it.
+  // Uses origSetItem (bypasses POST interceptor) to avoid reload loops.
+  // Reloads once if React already rendered with stale data.
   (async function(){
     try {
       var r = await fetch('/api/data', { cache: 'no-store' });
@@ -80,6 +81,10 @@ async function getDashboardHtml() {
         var dbLen = JSON.stringify(j.data).length;
         if (!local || localLen < 100 || dbLen > localLen) {
           origSetItem.call(localStorage, SK, JSON.stringify(j.data));
+          // Reload so React re-reads fresh DB data from localStorage.
+          // Safe because origSetItem doesn't trigger POST, so updated_at
+          // won't change and the next load won't overwrite again.
+          location.reload();
         }
       }
     } catch(e){ console.warn('[VAU] DB load failed', e); }
