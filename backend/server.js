@@ -46,7 +46,6 @@ async function getDashboardHtml() {
     'const API_URL = "";',
     'const API_URL = window.location.origin;'
   );
-  // Auto-inject: write key + API bridge (localStorage<->DB sync) + live polling
   const autoKey = process.env.AUTO_WRITE_KEY || process.env.WRITE_KEY;
   const injectedScript = `
 <script>
@@ -55,38 +54,38 @@ async function getDashboardHtml() {
   var WK = 'vau_dash_write_key';
   var writeKey = ${autoKey ? JSON.stringify(autoKey) : 'null'};
 
-  // 1. Capture original setItem BEFORE any overrides
+  // Capture original setItem before any overrides
   var origSetItem = Storage.prototype.setItem;
 
-  // 2. Auto-grant write access (use origSetItem to avoid triggering interceptor)
+  // Normalize timestamp to ms for safe comparison regardless of format (JS vs Postgres)
+  function tsMs(ts) { try { return ts ? new Date(ts).getTime() : 0; } catch(e) { return 0; } }
+
+  // Track last timestamp WE saved, so poll knows not to reload on our own saves
+  var ownSaveTs = 0;
+
+  // Auto-grant write access
   if (writeKey) try { origSetItem.call(localStorage, WK, writeKey); } catch(e){}
 
-  // 3. On load: pull DB data into localStorage so app sees it
-  //    Uses origSetItem to avoid triggering a POST back to DB (which would cause reload loop)
+  // On load: pull DB data into localStorage so app sees it
+  // Uses origSetItem to avoid triggering a POST back to DB
   (async function(){
     try {
       var r = await fetch('/api/data', { cache: 'no-store' });
       var j = await r.json();
+      if (j && j.updated_at) window.__vauDbTsMs = tsMs(j.updated_at);
       if (j && j.data && Array.isArray(j.data) && j.data.length > 0) {
         var local = null;
         try { local = JSON.parse(localStorage.getItem(SK)); } catch(e){}
         var localLen = local ? JSON.stringify(local).length : 0;
         var dbLen = JSON.stringify(j.data).length;
-        window.__vauDbTs = j.updated_at;
-        // Load DB data if local is empty/small OR DB has more data
         if (!local || localLen < 100 || dbLen > localLen) {
-          // Use origSetItem to bypass the POST interceptor - loading from DB should NOT trigger a save back
           origSetItem.call(localStorage, SK, JSON.stringify(j.data));
-          // Only reload if the app already rendered with stale/empty data
-          if (document.querySelector('[data-vau-loaded]')) {
-            location.reload();
-          }
         }
       }
     } catch(e){ console.warn('[VAU] DB load failed', e); }
   })();
 
-  // 4. Intercept localStorage writes -> POST to API (bridge app saves to DB)
+  // Intercept localStorage writes -> POST to API
   var postTimer = null;
   Storage.prototype.setItem = function(key, value) {
     origSetItem.call(this, key, value);
@@ -101,7 +100,11 @@ async function getDashboardHtml() {
             headers: { 'Content-Type': 'application/json', 'x-write-key': writeKey },
             body: JSON.stringify({ data: parsed })
           }).then(function(r){
-            if (r.ok) { r.json().then(function(j){ window.__vauDbTs = j.updated_at; }); }
+            if (r.ok) { r.json().then(function(j){
+              var ms = tsMs(j.updated_at);
+              window.__vauDbTsMs = ms;
+              ownSaveTs = ms; // mark as our own save so poll ignores it
+            }); }
             else { console.warn('[VAU] sync POST', r.status); }
           }).catch(function(e){ console.warn('[VAU] sync failed', e); });
         } catch(e){}
@@ -109,21 +112,26 @@ async function getDashboardHtml() {
     }
   };
 
-  // 5. Poll: reload if someone else saved newer data
+  // Poll: reload ONLY if someone else saved newer data (not us)
   async function poll() {
     try {
       var r = await fetch('/api/data', { cache: 'no-store' });
       var j = await r.json();
-      if (j && j.updated_at && window.__vauDbTs && j.updated_at !== window.__vauDbTs) {
-        window.__vauDbTs = j.updated_at;
+      if (!j || !j.updated_at) return;
+      var remoteMs = tsMs(j.updated_at);
+      var isNewer = window.__vauDbTsMs && remoteMs > window.__vauDbTsMs;
+      var isOurSave = remoteMs === ownSaveTs;
+      if (isNewer && !isOurSave) {
+        window.__vauDbTsMs = remoteMs;
         origSetItem.call(localStorage, SK, JSON.stringify(j.data));
         location.reload();
+      } else {
+        window.__vauDbTsMs = remoteMs;
       }
-      if (j && j.updated_at) window.__vauDbTs = j.updated_at;
     } catch(e){}
   }
-  setTimeout(poll, 5000);
-  setInterval(poll, 30000);
+  // Start polling after 45s (avoids race with initial app saves + POST responses)
+  setTimeout(function(){ poll(); setInterval(poll, 30000); }, 45000);
   document.addEventListener('visibilitychange', function(){
     if (document.visibilityState === 'visible') poll();
   });
@@ -169,13 +177,14 @@ app.post("/api/data", async (req, res) => {
   const data = req.body?.data;
   if (!data) return res.status(400).json({ error: "missing_data" });
   try {
-    await pool.query(
+    const result = await pool.query(
       `INSERT INTO dashboard_state (id, data, updated_at)
        VALUES (1, $1, NOW())
-       ON CONFLICT (id) DO UPDATE SET data = EXCLUDED.data, updated_at = NOW()`,
+       ON CONFLICT (id) DO UPDATE SET data = EXCLUDED.data, updated_at = NOW()
+       RETURNING updated_at`,
       [JSON.stringify(data)]
     );
-    res.json({ ok: true, updated_at: new Date().toISOString() });
+    res.json({ ok: true, updated_at: result.rows[0].updated_at });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "db_error", detail: String(err) });
