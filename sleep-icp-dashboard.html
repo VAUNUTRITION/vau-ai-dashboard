@@ -198,13 +198,13 @@ tr:hover td{background:rgba(98,191,189,.08)}
 /* ========= RECS ========= */
 .rec-grid{display:grid;grid-template-columns:auto 1fr;gap:14px 20px;margin-top:14px}
 .rec-num{
-  background:var(--ink);color:var(--lime);
-  width:34px;height:34px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Capriola',serif;font-weight:400;font-size:15px;flex-shrink:0;
+  font-family:'Capriola',serif;font-size:18px;font-weight:400;
+  background:var(--vau);color:var(--cream);
+  width:28px;height:28px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
 }
-.rec-text{color:var(--ink);padding-top:5px;font-size:14px;line-height:1.55}
-.rec-text strong{color:var(--vau);font-family:'Capriola',serif;font-weight:400;letter-spacing:.005em}
+.rec-text{color:var(--ink);font-size:13px;line-height:1.55}
+.rec-text strong{color:var(--vau);font-weight:600}
 
 /* ========= MISC ========= */
 a{color:var(--vau);text-decoration:none;border-bottom:1px dashed var(--line-dash)}
@@ -345,9 +345,69 @@ footer span{font-family:'Caveat',cursive;text-transform:none;font-size:16px;lett
   </div>
 </div>
 
+<!-- AMAZON COMPETITIVE INTELLIGENCE -->
+<div class="section">
+<h2>Amazon Competitive Landscape <span class="badge">Amazon US · 20 competitors</span></h2>
+<table>
+  <thead><tr><th style="width:3%">#</th><th style="width:15%">Brand/Product</th><th>Tier</th><th>Format</th><th>Price</th><th>Rating</th><th>Core Ingredients</th><th>Positioning</th></tr></thead>
+  <tbody id="amazon-tbody"></tbody>
+</table>
+</div>
+
+<!-- INGREDIENT MATRIX -->
+<div class="section">
+<h2>Ingredient Matrix <span class="badge">Formulation</span><span class="badge lime">Competitive</span></h2>
+<div class="chart-container"><canvas id="chart-amazon-ingredients"></canvas></div>
+<p class="micro"><b>Melatonin saturación máxima (12/20).</b> Apigenin es white space — solo 2/20 competidores lo usan (Momentous, Beam). Oportunidad de first-mover para REST FIRST.</p>
+</div>
+
+<!-- VOICE OF CUSTOMER -->
+<div class="section">
+<h2>Voice of Customer — Review Intelligence <span class="badge hot">15 brands · 265K+ reviews</span></h2>
+<div class="grid two-col">
+  <div>
+    <h3 style="font-family:'Capriola',serif;font-size:16px;margin-bottom:14px;color:var(--ink)">Top Pain Points</h3>
+    <div id="pain-points-container"></div>
+  </div>
+  <div>
+    <h3 style="font-family:'Capriola',serif;font-size:16px;margin-bottom:14px;color:var(--ink)">Positive Language Hooks</h3>
+    <div id="positive-hooks-container"></div>
+  </div>
+</div>
+</div>
+
+<!-- MARKET TIERS -->
+<div class="section dashed">
+<h2>Market Tiers y gaps <span class="badge ok">Oportunidad</span></h2>
+<table>
+  <thead><tr><th>Tier</th><th>Price Range</th><th># Brands</th><th>Key Players</th><th>Gaps/Weaknesses</th></tr></thead>
+  <tbody id="tiers-tbody"></tbody>
+</table>
+<div class="insight-box accent" style="margin-top:16px">
+  <h3>White space para REST FIRST</h3>
+  <p>Nadie domina 'high-performance sleep' con rigor clínico Y branding aspiracional DTC. Tier ideal: $35–55. Stack diferenciador: Mg glycinate + L-Theanine + Ashwagandha + Apigenin (solo 2/20 lo usan). Audiencia desatendida: founders, ejecutivos, atletas.</p>
+</div>
+</div>
+
+<!-- COMPETITIVE CLAIMS -->
+<div class="section">
+<h2>Claims que usan los competidores <span class="badge">Messaging</span></h2>
+<div class="chart-container"><canvas id="chart-claims"></canvas></div>
+<p class="micro"><b>'No next-day grogginess' es el claim con mayor upside — solo 8/20 lo usan pero es el dolor #1 en reviews.</b> 'Stress / cortisol support' en crecimiento post Expo West 2026.</p>
+</div>
+
 <!-- RECOMENDACIONES -->
 <div class="actions">
-<h2>Recomendaciones de portfolio para VAU <span class="badge lime">Action</span></h2>
+<h2>Key Takeaways <span class="badge lime">Amazon Insights</span></h2>
+<div class="rec-grid">
+  <div class="rec-num">1</div><div class="rec-text"><strong>APIGENIN = WHITE SPACE</strong> — Solo 2/20 marcas lo incluyen (Momentous, Beam). Awareness alta (Huberman) pero oferta baja. First-mover advantage para REST FIRST.</div>
+  <div class="rec-num">2</div><div class="rec-text"><strong>PREMIUM GAP</strong> — El tier $35–55 no tiene marca que combine calidad clínica con branding DTC aspiracional. Momentous es clínico pero "seco"; Lemme tiene marca pero no ciencia.</div>
+  <div class="rec-num">3</div><div class="rec-text"><strong>GROGGINESS = PALANCA #1</strong> — El dolor más citado en reviews (50K+ reviews). Liderar con "no-melatonin / low-melatonin" y stack de Mg + Theanine + Apigenin.</div>
+  <div class="rec-num">4</div><div class="rec-text"><strong>PROACTIVO > REACTIVO</strong> — "Optimiza tu recuperación" gana a "ayúdame a dormir". Los high performers no se ven con un problema — quieren ventaja.</div>
+  <div class="rec-num">5</div><div class="rec-text"><strong>TRUST SIGNALS</strong> — Third-party testing, NSF, dosificación transparente y "made in USA" justifican precio premium en reviews de Amazon.</div>
+</div>
+
+<h2 style="margin-top:28px;color:var(--cream);position:relative">Recomendaciones de portfolio para VAU <span class="badge lime">Action</span></h2>
 <div class="rec-grid">
   <div class="rec-num">1</div><div class="rec-text"><strong>Formato principal</strong> — powder · drink-mix stick pack. Benchmarks: Nello, MoonBrew, Yesnap. Mayor GMV/producto y breakout en Google Trends.</div>
   <div class="rec-num">2</div><div class="rec-text"><strong>Stack core</strong> — Mg glycinate + Ashwagandha KSM-66 + L-Theanine. Validado por los 3 top sellers. GABA como cuarto ingrediente premium opcional.</div>
@@ -361,12 +421,12 @@ footer span{font-family:'Caveat',cursive;text-transform:none;font-size:16px;lett
 </div>
 
 <footer>
-Capturado 2026-04-13 / 04-14 · Fuentes: Google Trends · Fastmoss · VAU Nutrition internal <br><span>your body remembers how.</span>
+Capturado 2026-04-13 / 04-14 · Fuentes: Google Trends · Fastmoss · Amazon · VAU Nutrition internal <br><span>your body remembers how.</span>
 </footer>
 </div>
 
 <script>
-const D = {"total_products": 3000, "total_brands": 1886, "total_gmv": 77706606, "total_gmv_7d": 761617, "total_units": 2371312, "avg_price": 32.35, "melatonin_free_count": 215, "melatonin_free_gmv": 13892075, "brands": [{"Store Name": "Nello", "N": 8, "GMV": 43701977, "GMV7": 127902.01}, {"Store Name": "LullaBites", "N": 1, "GMV": 11745142, "GMV7": 148985.58}, {"Store Name": "Goli Nutrition", "N": 6, "GMV": 2971408, "GMV7": 18511.6}, {"Store Name": "Yesnap Health", "N": 5, "GMV": 1825791, "GMV7": 42845.9}, {"Store Name": "Beast Bites Supplements", "N": 1, "GMV": 1763122, "GMV7": 1172.82}, {"Store Name": "The Happiest Hour Drinks", "N": 8, "GMV": 1604027, "GMV7": 3939.47}, {"Store Name": "MoonBrew", "N": 13, "GMV": 1416167, "GMV7": 13477.23}, {"Store Name": "Viyouth US", "N": 10, "GMV": 1238781, "GMV7": 76843.34}, {"Store Name": "Beam", "N": 6, "GMV": 561763, "GMV7": 13792.95}, {"Store Name": "Taste Salud", "N": 4, "GMV": 492698, "GMV7": 3651.8}], "top10": [{"name": "Nello Supercalm Calming Drink Mix with KSM-66 Ashwagandha Vitamin D3 Magnesium & L-Theanin", "brand": "Nello", "price": 33.96, "fmt": "Powder/Mix", "ing": "Magnesium, Ashwagandha, L-Theanine", "gmv": 31644931, "units": 843655, "gmv7": 69000}, {"name": "LullaBites Natural Sleep Gummies - 30 Servings - Sweet Strawberry Stars (Melatonin Free)", "brand": "LullaBites", "price": 30.51, "fmt": "Gummy", "ing": "Melatonin-Free", "gmv": 11745142, "units": 388676, "gmv7": 148985}, {"name": "Nello Supercalm Best Selling Flavors Bundle (2-Pack): KSM-66 Ashwagandha Calming Drink Mix", "brand": "Nello", "price": 59.92, "fmt": "Powder/Mix", "ing": "Magnesium, Ashwagandha, L-Theanine", "gmv": 4779054, "units": 81828, "gmv7": 7843}, {"name": "Nello Supercalm Tub (2-Pack): Calming Drink Mix with KSM-66 Ashwagandha, Vitamin D3, Mg", "brand": "Nello", "price": 67.42, "fmt": "Powder/Mix", "ing": "Magnesium, Ashwagandha, L-Theanine", "gmv": 3270978, "units": 49578, "gmv7": 14319}, {"name": "Supercalm Best Selling Flavors Bundle Tubs (2-Pack): KSM-66 Ashwagandha Calming Drink Mix", "brand": "Nello", "price": 67.42, "fmt": "Powder/Mix", "ing": "Magnesium, Ashwagandha, L-Theanine", "gmv": 1829914, "units": 27582, "gmv7": 8793}, {"name": "Nello Supercalm Calming Drink Mix with KSM-66 Ashwagandha Vitamin D3 Magnesium & L-Theanin", "brand": "Nello", "price": 38.21, "fmt": "Powder/Mix", "ing": "Magnesium, Ashwagandha, L-Theanine", "gmv": 1802988, "units": 44215, "gmv7": 15818}, {"name": "Valerian Infused Sleep & Nighttime Recovery Gummies — Beast Bites (NSF Certified for Sport)", "brand": "Beast Bites Supplements", "price": 9.99, "fmt": "Gummy", "ing": "Valerian", "gmv": 1763122, "units": 44979, "gmv7": 1172}, {"name": "Goli Dreamy Sleep Gummy — Melatonin, Vitamin D, Magnesium, Lemon Balm, Gelatin-Free", "brand": "Goli Nutrition", "price": 14.96, "fmt": "Gummy", "ing": "Melatonin, Magnesium", "gmv": 1637556, "units": 114739, "gmv7": 5815}, {"name": "Yesnap MAGICRELAX Calming Sparkling Mix · 8-in-1 Mg KSM-66 Ashwagandha Saffron", "brand": "Yesnap Health", "price": 3.5, "fmt": "Powder/Mix", "ing": "Magnesium, Ashwagandha, L-Theanine, GABA", "gmv": 1346968, "units": 59405, "gmv7": 8702}, {"name": "Viyouth 1000mg Magnesium Complex — 10 Elemental Mg Complex & Zinc for Calming Sleep", "brand": "Viyouth US", "price": 19.99, "fmt": "Capsule/Tablet", "ing": "Magnesium, Mg-Glycinate", "gmv": 1188513, "units": 70964, "gmv7": 75222}], "formats": [{"Format": "Powder/Mix", "N": 226, "GMV": 47990493}, {"Format": "Gummy", "N": 811, "GMV": 19820660}, {"Format": "Other", "N": 778, "GMV": 5651604}, {"Format": "Capsule/Tablet", "N": 931, "GMV": 2875530}, {"Format": "Liquid/Drops", "N": 165, "GMV": 924954}, {"Format": "Drink/Tea", "N": 54, "GMV": 284301}, {"Format": "Spray", "N": 11, "GMV": 99711}, {"Format": "Patch", "N": 24, "GMV": 59353}], "ingredients": [{"ing": "Magnesium", "n": 1338, "gmv": 57727005, "gmv_prod": 43144}, {"ing": "L-Theanine", "n": 487, "gmv": 49099937, "gmv_prod": 100821}, {"ing": "Ashwagandha", "n": 482, "gmv": 47797038, "gmv_prod": 99163}, {"ing": "Melatonin", "n": 853, "gmv": 20007928, "gmv_prod": 23455}, {"ing": "Melatonin-Free", "n": 215, "gmv": 13892075, "gmv_prod": 64614}, {"ing": "Mg-Glycinate", "n": 538, "gmv": 2557175, "gmv_prod": 4753}, {"ing": "Chamomile", "n": 141, "gmv": 2447473, "gmv_prod": 17357}, {"ing": "GABA", "n": 146, "gmv": 2399620, "gmv_prod": 16435}, {"ing": "Valerian", "n": 128, "gmv": 1945123, "gmv_prod": 15196}, {"ing": "Glycine", "n": 19, "gmv": 81105, "gmv_prod": 4268}], "weekly": [["Apr 13, 2025", 0, 5, 57, 9, 5], ["Apr 20, 2025", 0, 4, 53, 10, 7], ["Apr 27, 2025", 0, 3, 53, 9, 6], ["May 4, 2025", 0, 4, 51, 8, 6], ["May 11, 2025", 0, 4, 55, 9, 5], ["May 18, 2025", 1, 4, 54, 8, 5], ["May 25, 2025", 0, 4, 55, 10, 4], ["Jun 1, 2025", 0, 5, 58, 9, 5], ["Jun 8, 2025", 0, 5, 52, 10, 5], ["Jun 15, 2025", 1, 5, 58, 9, 5], ["Jun 22, 2025", 0, 5, 59, 9, 4], ["Jun 29, 2025", 0, 5, 56, 10, 5], ["Jul 6, 2025", 0, 5, 63, 12, 4], ["Jul 13, 2025", 0, 6, 66, 13, 5], ["Jul 20, 2025", 1, 5, 66, 15, 6], ["Jul 27, 2025", 1, 6, 96, 17, 6], ["Aug 3, 2025", 1, 5, 71, 14, 5], ["Aug 10, 2025", 1, 5, 67, 14, 6], ["Aug 17, 2025", 1, 5, 63, 13, 6], ["Aug 24, 2025", 1, 5, 66, 14, 6], ["Aug 31, 2025", 1, 5, 68, 14, 7], ["Sep 7, 2025", 1, 5, 61, 13, 6], ["Sep 14, 2025", 1, 5, 68, 14, 7], ["Sep 21, 2025", 1, 6, 70, 14, 7], ["Sep 28, 2025", 1, 6, 70, 15, 8], ["Oct 5, 2025", 1, 5, 70, 14, 8], ["Oct 12, 2025", 1, 5, 65, 14, 8], ["Oct 19, 2025", 1, 5, 66, 14, 8], ["Oct 26, 2025", 1, 6, 60, 13, 7], ["Dec 21, 2025", 1, 5, 60, 14, 8], ["Dec 28, 2025", 1, 6, 83, 19, 11], ["Jan 4, 2026", 2, 8, 100, 20, 10], ["Jan 11, 2026", 1, 5, 91, 17, 11], ["Jan 18, 2026", 1, 6, 85, 18, 12], ["Jan 25, 2026", 1, 5, 82, 17, 13], ["Feb 1, 2026", 2, 3, 78, 19, 15], ["Feb 8, 2026", 2, 6, 74, 18, 13], ["Feb 15, 2026", 1, 5, 82, 19, 15], ["Feb 22, 2026", 1, 5, 83, 21, 15], ["Mar 1, 2026", 2, 5, 94, 32, 16], ["Mar 8, 2026", 3, 5, 100, 28, 13], ["Mar 15, 2026", 2, 5, 92, 34, 14], ["Mar 22, 2026", 2, 8, 93, 51, 14], ["Mar 29, 2026", 1, 7, 77, 42, 9], ["Apr 5, 2026", 1, 10, 80, 41, 9], ["Apr 12, 2026", 2, 10, 82, 44, 8]], "hashtags": [["sleep", 11], ["magnesium", 8], ["tiktokshopcreatorpicks", 7], ["greenish", 4], ["health", 4], ["sleepgummies", 3], ["cortisol", 3], ["lovewellness", 3], ["bettersleep", 3], ["tiktokshop", 3], ["sleepsupplement", 3], ["selfcare", 3], ["sleepsupport", 3], ["fyp", 3], ["insomnia", 2], ["calmdrink", 2], ["wellness", 2], ["fallasleepfast", 2], ["magnesiumdeficiency", 2], ["tiktokshopfinds", 2]], "video_avg_views": 13856, "video_avg_gmv": 518.88, "top_videos": [{"Video Title": "She was knockeddd 😂😴 #lullabites #sleepgummies #insomnia #graveyardshift", "Video Views": 44300, "Video Units Sold": 106, "Video GMV": 13603.06, "Product Title": "LullaBites Natural Sleep Gummies - Sweet Strawberry Stars (Melatonin Free)"}, {"Video Title": "When mommy just needs a moment … thanks to supercalm #nellosupercalm #calmdrink #chillmom #momlife", "Video Views": 287900, "Video Units Sold": 132, "Video GMV": 7641.0, "Product Title": "Nello Supercalm Calming Drink Mix with KSM-66 Ashwagandha"}, {"Video Title": "This Advice Can Change Your Life Tonight 🚨😳 #taller #growthspurt #supplementsthatwork", "Video Views": 239400, "Video Units Sold": 68, "Video GMV": 3679.08, "Product Title": "Heightener Height Growth Sleep Gummies"}, {"Video Title": "NYT Wordle & Connections 4/6. #wordle #connections #nytgames", "Video Views": 15000, "Video Units Sold": 12, "Video GMV": 1808.11, "Product Title": "MoonBrew Sleepy Hot Cocoa — Melatonin-Free Magnesium Sleep Drink"}, {"Video Title": "I slept sooooo good with this #wellness #fallasleepfast #naturalsleepaid #lovewellness", "Video Views": 190100, "Video Units Sold": 8, "Video GMV": 1226.02, "Product Title": "Love Wellness Sleep* Quick Melt Strips 2 Pack"}, {"Video Title": "CRAZY DEALS‼️ #springglowup #springsale #tiktokshopspringsale", "Video Views": 1075, "Video Units Sold": 3, "Video GMV": 858.0, "Product Title": "STASIS Day & Night Set — Energy Focus + Calm Sleep Supplements"}]};
+const D = {"total_products": 3000, "total_brands": 1886, "total_gmv": 77706606, "total_gmv_7d": 761617, "total_units": 2371312, "avg_price": 32.35, "melatonin_free_count": 215, "melatonin_free_gmv": 13892075, "brands": [{"Store Name": "Nello", "N": 8, "GMV": 43701977, "GMV7": 127902.01}, {"Store Name": "LullaBites", "N": 1, "GMV": 11745142, "GMV7": 148985.58}, {"Store Name": "Goli Nutrition", "N": 6, "GMV": 2971408, "GMV7": 18511.6}, {"Store Name": "Yesnap Health", "N": 5, "GMV": 1825791, "GMV7": 42845.9}, {"Store Name": "Beast Bites Supplements", "N": 1, "GMV": 1763122, "GMV7": 1172.82}, {"Store Name": "The Happiest Hour Drinks", "N": 8, "GMV": 1604027, "GMV7": 3939.47}, {"Store Name": "MoonBrew", "N": 13, "GMV": 1416167, "GMV7": 13477.23}, {"Store Name": "Viyouth US", "N": 10, "GMV": 1238781, "GMV7": 76843.34}, {"Store Name": "Beam", "N": 6, "GMV": 561763, "GMV7": 13792.95}, {"Store Name": "Taste Salud", "N": 4, "GMV": 492698, "GMV7": 3651.8}], "top10": [{"name": "Nello Supercalm Calming Drink Mix with KSM-66 Ashwagandha Vitamin D3 Magnesium & L-Theanin", "brand": "Nello", "price": 33.96, "fmt": "Powder/Mix", "ing": "Magnesium, Ashwagandha, L-Theanine", "gmv": 31644931, "units": 843655, "gmv7": 69000}, {"name": "LullaBites Natural Sleep Gummies - 30 Servings - Sweet Strawberry Stars (Melatonin Free)", "brand": "LullaBites", "price": 30.51, "fmt": "Gummy", "ing": "Melatonin-Free", "gmv": 11745142, "units": 388676, "gmv7": 148985}, {"name": "Nello Supercalm Best Selling Flavors Bundle (2-Pack): KSM-66 Ashwagandha Calming Drink Mix", "brand": "Nello", "price": 59.92, "fmt": "Powder/Mix", "ing": "Magnesium, Ashwagandha, L-Theanine", "gmv": 4779054, "units": 81828, "gmv7": 7843}, {"name": "Nello Supercalm Tub (2-Pack): Calming Drink Mix with KSM-66 Ashwagandha, Vitamin D3, Mg", "brand": "Nello", "price": 67.42, "fmt": "Powder/Mix", "ing": "Magnesium, Ashwagandha, L-Theanine", "gmv": 3270978, "units": 49578, "gmv7": 14319}, {"name": "Supercalm Best Selling Flavors Bundle Tubs (2-Pack): KSM-66 Ashwagandha Calming Drink Mix", "brand": "Nello", "price": 67.42, "fmt": "Powder/Mix", "ing": "Magnesium, Ashwagandha, L-Theanine", "gmv": 1829914, "units": 27582, "gmv7": 8793}, {"name": "Nello Supercalm Calming Drink Mix with KSM-66 Ashwagandha Vitamin D3 Magnesium & L-Theanin", "brand": "Nello", "price": 38.21, "fmt": "Powder/Mix", "ing": "Magnesium, Ashwagandha, L-Theanine", "gmv": 1802988, "units": 44215, "gmv7": 15818}, {"name": "Valerian Infused Sleep & Nighttime Recovery Gummies — Beast Bites (NSF Certified for Sport)", "brand": "Beast Bites Supplements", "price": 9.99, "fmt": "Gummy", "ing": "Valerian", "gmv": 1763122, "units": 44979, "gmv7": 1172}, {"name": "Goli Dreamy Sleep Gummy — Melatonin, Vitamin D, Magnesium, Lemon Balm, Gelatin-Free", "brand": "Goli Nutrition", "price": 14.96, "fmt": "Gummy", "ing": "Melatonin, Magnesium", "gmv": 1637556, "units": 114739, "gmv7": 5815}, {"name": "Yesnap MAGICRELAX Calming Sparkling Mix · 8-in-1 Mg KSM-66 Ashwagandha Saffron", "brand": "Yesnap Health", "price": 3.5, "fmt": "Powder/Mix", "ing": "Magnesium, Ashwagandha, L-Theanine, GABA", "gmv": 1346968, "units": 59405, "gmv7": 8702}, {"name": "Viyouth 1000mg Magnesium Complex — 10 Elemental Mg Complex & Zinc for Calming Sleep", "brand": "Viyouth US", "price": 19.99, "fmt": "Capsule/Tablet", "ing": "Magnesium, Mg-Glycinate", "gmv": 1188513, "units": 70964, "gmv7": 75222}], "formats": [{"Format": "Powder/Mix", "N": 226, "GMV": 47990493}, {"Format": "Gummy", "N": 811, "GMV": 19820660}, {"Format": "Other", "N": 778, "GMV": 5651604}, {"Format": "Capsule/Tablet", "N": 931, "GMV": 2875530}, {"Format": "Liquid/Drops", "N": 165, "GMV": 924954}, {"Format": "Drink/Tea", "N": 54, "GMV": 284301}, {"Format": "Spray", "N": 11, "GMV": 99711}, {"Format": "Patch", "N": 24, "GMV": 59353}], "ingredients": [{"ing": "Magnesium", "n": 1338, "gmv": 57727005, "gmv_prod": 43144}, {"ing": "L-Theanine", "n": 487, "gmv": 49099937, "gmv_prod": 100821}, {"ing": "Ashwagandha", "n": 482, "gmv": 47797038, "gmv_prod": 99163}, {"ing": "Melatonin", "n": 853, "gmv": 20007928, "gmv_prod": 23455}, {"ing": "Melatonin-Free", "n": 215, "gmv": 13892075, "gmv_prod": 64614}, {"ing": "Mg-Glycinate", "n": 538, "gmv": 2557175, "gmv_prod": 4753}, {"ing": "Chamomile", "n": 141, "gmv": 2447473, "gmv_prod": 17357}, {"ing": "GABA", "n": 146, "gmv": 2399620, "gmv_prod": 16435}, {"ing": "Valerian", "n": 128, "gmv": 1945123, "gmv_prod": 15196}, {"ing": "Glycine", "n": 19, "gmv": 81105, "gmv_prod": 4268}], "weekly": [["Apr 13, 2025", 0, 5, 57, 9, 5], ["Apr 20, 2025", 0, 4, 53, 10, 7], ["Apr 27, 2025", 0, 3, 53, 9, 6], ["May 4, 2025", 0, 4, 51, 8, 6], ["May 11, 2025", 0, 4, 55, 9, 5], ["May 18, 2025", 1, 4, 54, 8, 5], ["May 25, 2025", 0, 4, 55, 10, 4], ["Jun 1, 2025", 0, 5, 58, 9, 5], ["Jun 8, 2025", 0, 5, 52, 10, 5], ["Jun 15, 2025", 1, 5, 58, 9, 5], ["Jun 22, 2025", 0, 5, 59, 9, 4], ["Jun 29, 2025", 0, 5, 56, 10, 5], ["Jul 6, 2025", 0, 5, 63, 12, 4], ["Jul 13, 2025", 0, 6, 66, 13, 5], ["Jul 20, 2025", 1, 5, 66, 15, 6], ["Jul 27, 2025", 1, 6, 96, 17, 6], ["Aug 3, 2025", 1, 5, 71, 14, 5], ["Aug 10, 2025", 1, 5, 67, 14, 6], ["Aug 17, 2025", 1, 5, 63, 13, 6], ["Aug 24, 2025", 1, 5, 66, 14, 6], ["Aug 31, 2025", 1, 5, 68, 14, 7], ["Sep 7, 2025", 1, 5, 61, 13, 6], ["Sep 14, 2025", 1, 5, 68, 14, 7], ["Sep 21, 2025", 1, 6, 70, 14, 7], ["Sep 28, 2025", 1, 6, 70, 15, 8], ["Oct 5, 2025", 1, 5, 70, 14, 8], ["Oct 12, 2025", 1, 5, 65, 14, 8], ["Oct 19, 2025", 1, 5, 66, 14, 8], ["Oct 26, 2025", 1, 6, 60, 13, 7], ["Dec 21, 2025", 1, 5, 60, 14, 8], ["Dec 28, 2025", 1, 6, 83, 19, 11], ["Jan 4, 2026", 2, 8, 100, 20, 10], ["Jan 11, 2026", 1, 5, 91, 17, 11], ["Jan 18, 2026", 1, 6, 85, 18, 12], ["Jan 25, 2026", 1, 5, 82, 17, 13], ["Feb 1, 2026", 2, 3, 78, 19, 15], ["Feb 8, 2026", 2, 6, 74, 18, 13], ["Feb 15, 2026", 1, 5, 82, 19, 15], ["Feb 22, 2026", 1, 5, 83, 21, 15], ["Mar 1, 2026", 2, 5, 94, 32, 16], ["Mar 8, 2026", 3, 5, 100, 28, 13], ["Mar 15, 2026", 2, 5, 92, 34, 14], ["Mar 22, 2026", 2, 8, 93, 51, 14], ["Mar 29, 2026", 1, 7, 77, 42, 9], ["Apr 5, 2026", 1, 10, 80, 41, 9], ["Apr 12, 2026", 2, 10, 82, 44, 8]], "hashtags": [["sleep", 11], ["magnesium", 8], ["tiktokshopcreatorpicks", 7], ["greenish", 4], ["health", 4], ["sleepgummies", 3], ["cortisol", 3], ["lovewellness", 3], ["bettersleep", 3], ["tiktokshop", 3], ["sleepsupplement", 3], ["selfcare", 3], ["sleepsupport", 3], ["fyp", 3], ["insomnia", 2], ["calmdrink", 2], ["wellness", 2], ["fallasleepfast", 2], ["magnesiumdeficiency", 2], ["tiktokshopfinds", 2]], "video_avg_views": 13856, "video_avg_gmv": 518.88, "top_videos": [{"Video Title": "She was knockeddd 😂😴 #lullabites #sleepgummies #insomnia #graveyardshift", "Video Views": 44300, "Video Units Sold": 106, "Video GMV": 13603.06, "Product Title": "LullaBites Natural Sleep Gummies - Sweet Strawberry Stars (Melatonin Free)"}, {"Video Title": "When mommy just needs a moment … thanks to supercalm #nellosupercalm #calmdrink #chillmom #momlife", "Video Views": 287900, "Video Units Sold": 132, "Video GMV": 7641.0, "Product Title": "Nello Supercalm Calming Drink Mix with KSM-66 Ashwagandha"}, {"Video Title": "This Advice Can Change Your Life Tonight 🚨😳 #taller #growthspurt #supplementsthatwork", "Video Views": 239400, "Video Units Sold": 68, "Video GMV": 3679.08, "Product Title": "Heightener Height Growth Sleep Gummies"}, {"Video Title": "NYT Wordle & Connections 4/6. #wordle #connections #nytgames", "Video Views": 15000, "Video Units Sold": 12, "Video GMV": 1808.11, "Product Title": "MoonBrew Sleepy Hot Cocoa — Melatonin-Free Magnesium Sleep Drink"}, {"Video Title": "I slept sooooo good with this #wellness #fallasleepfast #naturalsleepaid #lovewellness", "Video Views": 190100, "Video Units Sold": 8, "Video GMV": 1226.02, "Product Title": "Love Wellness Sleep* Quick Melt Strips 2 Pack"}, {"Video Title": "CRAZY DEALS‼️ #springglowup #springsale #tiktokshopspringsale", "Video Views": 1075, "Video Units Sold": 3, "Video GMV": 858.0, "Product Title": "STASIS Day & Night Set — Energy Focus + Calm Sleep Supplements"}], "amazon_competitors": [{"id": 1, "brand": "Natrol Melatonin 10mg", "tier": "Mass Market", "fmt": "Gummies", "price": "$12–18", "rating": "4.5★", "ing": "Melatonin 10mg", "pos": "Volume leader / value"}, {"id": 2, "brand": "OLLY Sleep", "tier": "Mass Premium", "fmt": "Gummies", "price": "$14–22", "rating": "4.4★", "ing": "Melatonin 3mg, L-Theanine, Chamomile, Lemon Balm, Passionflower", "pos": "Lifestyle wellness brand"}, {"id": 3, "brand": "ZzzQuil PURE Zzzs", "tier": "Mass Market", "fmt": "Gummies", "price": "$12–20", "rating": "4.4★", "ing": "Melatonin 2mg, Chamomile, Lavender, Lemon Balm", "pos": "Pharma trust / brand legacy"}, {"id": 4, "brand": "Amazon Basics Melatonin", "tier": "Budget", "fmt": "Gummies", "price": "$7–10", "rating": "4.4★", "ing": "Melatonin 5mg", "pos": "Private label / value"}, {"id": 5, "brand": "Relaxium Sleep", "tier": "Mid-Premium", "fmt": "Capsules", "price": "$28–40", "rating": "3.6★", "ing": "Melatonin 5mg, Ashwagandha, Valerest™, GABA, L-Tryptophan, Mg, Chamomile, Passionflower", "pos": "Doctor-endorsed authority"}, {"id": 6, "brand": "Vitafusion Max Strength", "tier": "Mass Market", "fmt": "Gummies", "price": "$10–16", "rating": "4.5★", "ing": "Melatonin 10mg", "pos": "Trusted vitamin brand"}, {"id": 7, "brand": "Lemme Sleep (Kourtney K.)", "tier": "Premium DTC", "fmt": "Gummies", "price": "$25–30", "rating": "4.3★", "ing": "Melatonin 5mg, Elderberry, Mg, L-Theanine 50mg, Chamomile, Lavender", "pos": "Celebrity / lifestyle"}, {"id": 8, "brand": "Nature Made Melatonin", "tier": "Mass Market", "fmt": "Gummies/Tabs", "price": "$8–14", "rating": "4.6★", "ing": "Melatonin 5mg", "pos": "Pharmacy credibility"}, {"id": 9, "brand": "Momentous Sleep Pack", "tier": "Premium Perf.", "fmt": "Capsules (pack)", "price": "$45–55", "rating": "4.5★", "ing": "Mag L-Threonate, L-Theanine 200mg, Apigenin 50mg", "pos": "Science + performance"}, {"id": 10, "brand": "Beam Dream", "tier": "Premium DTC", "fmt": "Powder (cocoa)", "price": "$52–65", "rating": "4.3★", "ing": "Magnesium, L-Theanine, Reishi, GABA, Apigenin", "pos": "Ritual / experiential"}, {"id": 11, "brand": "Moon Juice Magnesi-Om", "tier": "Premium DTC", "fmt": "Powder", "price": "$42–44", "rating": "4.3★", "ing": "Mag Chelate Blend (3 forms), L-Theanine", "pos": "Adaptogenic lifestyle"}, {"id": 12, "brand": "Pure Encapsulations Mag Glycinate", "tier": "Clinical Premium", "fmt": "Capsules", "price": "$24–38", "rating": "4.7★", "ing": "Magnesium Glycinate", "pos": "Clinical purity / trust"}, {"id": 13, "brand": "Double Wood Mag Glycinate 400mg", "tier": "Value Premium", "fmt": "Capsules", "price": "$16–20", "rating": "4.5★", "ing": "Magnesium Glycinate 400mg", "pos": "Quality at accessible price"}, {"id": 14, "brand": "Jacked Factory Lean PM", "tier": "Niche (Fitness)", "fmt": "Capsules", "price": "$20–25", "rating": "4.3★", "ing": "L-Theanine 200mg, Green Tea Extract, Melatonin 5mg, Mg, B6", "pos": "Performance + body comp"}, {"id": 15, "brand": "ZzzQuil Triple Action", "tier": "Mass Premium", "fmt": "Gummies", "price": "$15–22", "rating": "4.3★", "ing": "Melatonin 6mg, Ashwagandha", "pos": "Multi-benefit sleep"}, {"id": 16, "brand": "Natrol Sleep + Calm", "tier": "Mass Market", "fmt": "Gummies", "price": "$12–16", "rating": "4.4★", "ing": "Melatonin 6mg, L-Theanine, Chamomile, Lavender, Lemon Balm", "pos": "Calm-focused sleep"}, {"id": 17, "brand": "ZzzQuil Restorative Herbal", "tier": "Mass Premium", "fmt": "Tablets", "price": "$14–18", "rating": "4.1★", "ing": "Valerian Root, Hops, Passionflower", "pos": "Herbal / clean positioning"}, {"id": 18, "brand": "Thorne Mag Bisglycinate", "tier": "Clinical Premium", "fmt": "Powder", "price": "$30–40", "rating": "4.6★", "ing": "Magnesium Bisglycinate", "pos": "Medical-grade quality"}, {"id": 19, "brand": "Natural Vitality Calm + Ashwagandha", "tier": "Mid-Premium", "fmt": "Capsules", "price": "$18–24", "rating": "4.3★", "ing": "Magnesium Glycinate, Ashwagandha", "pos": "Stress-to-sleep bridge"}, {"id": 20, "brand": "Integrative Therapeutics Cortisol Manager", "tier": "Clinical Premium", "fmt": "Tablets", "price": "$30–45", "rating": "4.5★", "ing": "Ashwagandha (Sensoril), L-Theanine", "pos": "Cortisol-focused / clinical"}], "amazon_ingredients": [{"ing": "Melatonin", "freq": 12}, {"ing": "Magnesium", "freq": 10}, {"ing": "L-Theanine", "freq": 8}, {"ing": "Chamomile", "freq": 5}, {"ing": "Ashwagandha", "freq": 4}, {"ing": "Lavender", "freq": 3}, {"ing": "Passionflower", "freq": 3}, {"ing": "Lemon Balm", "freq": 3}, {"ing": "GABA", "freq": 2}, {"ing": "Valerian", "freq": 2}, {"ing": "Apigenin", "freq": 2}, {"ing": "Reishi", "freq": 1}, {"ing": "L-Tryptophan", "freq": 1}, {"ing": "Hops", "freq": 1}, {"ing": "Elderberry", "freq": 1}], "pain_points": [{"title": "Morning grogginess / 'hangover effect'", "freq": "HIGH", "severity": "★★★★★", "brands": "Natrol 10mg, Vitafusion, Relaxium, ZzzQuil"}, {"title": "Doesn't work / stops working", "freq": "HIGH", "severity": "★★★★☆", "brands": "Relaxium, ZzzQuil Herbal, Beam Dream"}, {"title": "GI issues (stomach, nausea)", "freq": "MED-HIGH", "severity": "★★★★☆", "brands": "Relaxium, Moon Juice, high-dose melatonin"}, {"title": "Bad smell / taste", "freq": "MED", "severity": "★★★☆☆", "brands": "ZzzQuil tablets (#1 offender)"}, {"title": "Overpriced / not worth it", "freq": "MED-HIGH", "severity": "★★★★☆", "brands": "Beam ($65-85), Momentous ($45-55), Relaxium"}, {"title": "Vivid / bizarre dreams", "freq": "MED", "severity": "★★★☆☆", "brands": "any high-dose melatonin (5mg+)"}, {"title": "Subscription traps", "freq": "MED", "severity": "★★★★☆", "brands": "Relaxium (worst), Beam Dream"}, {"title": "Too many pills per serving", "freq": "LOW-MED", "severity": "★★☆☆☆", "brands": "Momentous (3 caps), Pure Encap. (4 caps)"}], "positive_hooks": [{"text": "Best sleep I've had in years", "freq": "VERY HIGH"}, {"text": "Woke up feeling refreshed/energized", "freq": "VERY HIGH"}, {"text": "No morning grogginess", "freq": "HIGH"}, {"text": "My Oura/Whoop scores improved", "freq": "MEDIUM"}, {"text": "Finally something that actually works", "freq": "HIGH"}, {"text": "Calms my racing mind", "freq": "HIGH"}, {"text": "Part of my nightly ritual", "freq": "MEDIUM"}, {"text": "Doctor/practitioner recommended it", "freq": "MEDIUM"}, {"text": "Non-habit forming / clean ingredients", "freq": "HIGH"}, {"text": "Worth every penny", "freq": "LOW-MED"}], "market_tiers": [{"tier": "Budget", "price": "$7–16", "count": 5, "players": "Amazon Basics, Natrol, Vitafusion, Nature Made", "gaps": "Zero brand storytelling; no stacks; no performance angle"}, {"tier": "Mass Premium", "price": "$14–22", "count": 4, "players": "OLLY, ZzzQuil, Natrol Sleep+Calm", "gaps": "Generic wellness; low-dose stacks; no high-performer focus"}, {"tier": "Mid-Premium", "price": "$20–30", "count": 3, "players": "Relaxium, Lean PM, Natural Vitality", "gaps": "Polarizing reviews; fitness-only; nothing bridges wellness + performance"}, {"tier": "Premium DTC", "price": "$30–65", "count": 3, "players": "Lemme, Beam Dream, Moon Juice", "gaps": "Female-skewing; not science-forward; ritual over results"}, {"tier": "Clinical Premium", "price": "$30–55", "count": 5, "players": "Momentous, Pure Encap., Double Wood, Thorne, Integrative", "gaps": "Dry brand personality; hard to discover; no DTC flair"}], "claims_data": [{"claim": "Fall asleep faster", "count": 16}, {"claim": "Non-habit forming", "count": 14}, {"claim": "Drug-free / natural", "count": 13}, {"claim": "Stay asleep longer", "count": 12}, {"claim": "No next-day grogginess", "count": 8}, {"claim": "Stress / cortisol support", "count": 5}, {"claim": "Doctor/scientist formulated", "count": 3}, {"claim": "Celebrity endorsed", "count": 3}, {"claim": "NSF Certified", "count": 2}, {"claim": "Bedtime ritual", "count": 2}]};
 
 const fmt = n => n.toLocaleString('en-US');
 const $ = (id,v)=>document.getElementById(id).textContent=v;
@@ -502,6 +562,73 @@ document.getElementById('hashtag-cloud').innerHTML = D.hashtags.map(([tag,cnt])=
   const cls = core.includes(tag)?'pill':'';
   return `<span class="${cls}" style="font-size:${size}px;margin:3px;display:inline-block">#${tag} <small style="color:var(--ink-soft);font-size:.75em">(${cnt})</small></span>`;
 }).join(' ');
+
+// Amazon competitors table
+document.getElementById('amazon-tbody').innerHTML = D.amazon_competitors.map((c,i)=>{
+  return `<tr>
+    <td>${c.id}</td>
+    <td><span class="product-name">${c.brand}</span></td>
+    <td><span class="tag">${c.tier}</span></td>
+    <td><span class="tag">${c.fmt}</span></td>
+    <td>${c.price}</td>
+    <td>${c.rating}</td>
+    <td style="font-size:12px">${c.ing}</td>
+    <td style="font-size:12px;color:var(--ink-soft)">${c.pos}</td>
+  </tr>`;
+}).join('');
+
+// Amazon ingredients chart
+new Chart(document.getElementById('chart-amazon-ingredients'), {
+  type:'bar',
+  data:{labels:D.amazon_ingredients.map(r=>r.ing),
+    datasets:[{data:D.amazon_ingredients.map(r=>r.freq),backgroundColor:VAU.teal,borderRadius:6}]},
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>''+ctx.parsed.x+' brands'}}},
+    scales:{x:{beginAtZero:true,max:13,grid:{color:VAU.grid},ticks:{stepSize:2}},y:{grid:{display:false}}}
+  }
+});
+
+// Pain points
+document.getElementById('pain-points-container').innerHTML = D.pain_points.map(pp=>{
+  return `<div class="insight-box" style="border-left-color:var(--ink)">
+    <h3>${pp.title}</h3>
+    <div class="stat-row" style="margin-top:8px;font-size:11px;gap:12px">
+      <span>Freq: <b>${pp.freq}</b></span>
+      <span>Severity: <b>${pp.severity}</b></span>
+    </div>
+    <p style="margin-top:8px;font-size:12px;color:var(--ink-soft)">Brands: ${pp.brands}</p>
+  </div>`;
+}).join('');
+
+// Positive hooks
+document.getElementById('positive-hooks-container').innerHTML = D.positive_hooks.map(ph=>{
+  return `<div class="insight-box" style="border-left-color:var(--lime)">
+    <h3>"${ph.text}"</h3>
+    <p style="margin-top:8px;font-size:12px;color:var(--ink-soft)"><b>${ph.freq}</b> frequency</p>
+  </div>`;
+}).join('');
+
+// Market tiers table
+document.getElementById('tiers-tbody').innerHTML = D.market_tiers.map(t=>{
+  return `<tr>
+    <td><b>${t.tier}</b></td>
+    <td>${t.price}</td>
+    <td>${t.count}</td>
+    <td style="font-size:12px">${t.players}</td>
+    <td style="font-size:12px;color:var(--ink-soft)">${t.gaps}</td>
+  </tr>`;
+}).join('');
+
+// Claims chart
+new Chart(document.getElementById('chart-claims'), {
+  type:'bar',
+  data:{labels:D.claims_data.map(c=>c.claim),
+    datasets:[{data:D.claims_data.map(c=>c.count),backgroundColor:VAU.ink,borderRadius:6}]},
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>''+ctx.parsed.x+' brands'}}},
+    scales:{x:{beginAtZero:true,max:17,grid:{color:VAU.grid},ticks:{stepSize:2}},y:{grid:{display:false}}}
+  }
+});
 </script>
 </body>
 </html>
