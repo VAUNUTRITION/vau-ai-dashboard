@@ -551,8 +551,25 @@ const chartFormats = new Chart(document.getElementById('chart-formats'),{type:'d
 // Brands bar
 const chartBrands = new Chart(document.getElementById('chart-brands'),{type:'bar',data:{labels:D.brands.map(b=>b['Store Name']),datasets:[{label:'GMV',data:D.brands.map(b=>b.GMV),backgroundColor:VAU.vau}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{callback:v=>fmtMoney(v)}}}}});
 
-// Ingredients scatter
-const chartIng = new Chart(document.getElementById('chart-ingredients'),{type:'scatter',data:{datasets:[{label:'GMV/Product',type:'line',data:D.ingredients.map(i=>({x:i.n,y:i.gmv_prod})),borderColor:VAU.lime,backgroundColor:VAU.lime+'40',borderWidth:2,fill:true},{label:'Products',type:'bar',data:D.ingredients.map(i=>({x:i.n,y:i.n})),backgroundColor:VAU.teal+'60'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,font:{size:9}}}},scales:{y:{position:'right'}}}});
+// Ingredients combo (bar = # products on left Y, line = GMV/product on right Y)
+const chartIng = new Chart(document.getElementById('chart-ingredients'),{
+  type:'bar',
+  data:{
+    labels:D.ingredients.map(i=>i.ing),
+    datasets:[
+      {type:'bar',label:'# Productos',data:D.ingredients.map(i=>i.n),backgroundColor:VAU.teal,borderRadius:6,yAxisID:'y',order:2},
+      {type:'line',label:'GMV / producto ($)',data:D.ingredients.map(i=>i.gmv_prod),borderColor:VAU.vau,backgroundColor:VAU.lime+'55',borderWidth:3,tension:0.35,pointRadius:5,pointBackgroundColor:VAU.lime,pointBorderColor:VAU.vau,yAxisID:'y1',order:1}
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'top',labels:{usePointStyle:true,boxWidth:8,color:VAU.ink,font:{size:11}}}},
+    scales:{
+      y:{position:'left',grid:{color:VAU.grid},title:{display:true,text:'# Productos',color:VAU.inkSoft,font:{size:11}}},
+      y1:{position:'right',grid:{display:false},title:{display:true,text:'GMV/producto ($)',color:VAU.inkSoft,font:{size:11}},ticks:{callback:v=>fmtMoney(v)}},
+      x:{grid:{display:false},ticks:{font:{size:10},maxRotation:45}}
+    }
+  }
+});
 
 // Amazon ingredients horizontal bar
 const chartAmazonIng = new Chart(document.getElementById('chart-amazon-ingredients'),{type:'bar',data:{labels:D.amazon_ingredients.map(i=>i.ing),datasets:[{label:'# Brands',data:D.amazon_ingredients.map(i=>i.freq),backgroundColor:VAU.vau}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true}}}});
