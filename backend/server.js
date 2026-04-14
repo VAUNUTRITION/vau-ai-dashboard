@@ -51,35 +51,84 @@ async function getDashboardHtml() {
     'const API_URL = "";\nwindow.__VAU_API_URL = window.location.origin;',
     'const API_URL = window.location.origin;'
   );
-  // Auto-inject write key + force API-first + polling so team members always see fresh data
+  // Auto-inject: write key + API bridge (localStorageâDB sync) + live polling
   const autoKey = process.env.AUTO_WRITE_KEY || process.env.WRITE_KEY;
   const injectedScript = `
 <script>
-try {
-  // Auto-grant write access to every visitor
-  ${autoKey ? `localStorage.setItem('vau_dash_write_key', ${JSON.stringify(autoKey)});` : ''}
-  // Clear stale local cache so the API is always the source of truth on load
-  localStorage.removeItem('vau_dash_v8');
-  localStorage.removeItem('vau_dash_v7');
-  localStorage.removeItem('vau_dash_v6');
-} catch(e){}
-// Live sync: reload page if server data was updated by someone else
 (function(){
-  var lastSeen = null;
-  async function check() {
+  var SK = 'vau_dash_v8';
+  var WK = 'vau_dash_write_key';
+  var writeKey = ${autoKey ? JSON.stringify(autoKey) : 'null'};
+
+  // 1. Auto-grant write access
+  if (writeKey) try { localStorage.setItem(WK, writeKey); } catch(e){}
+
+  // 2. On load: pull DB data into localStorage so React sees it
+  (async function(){
     try {
       var r = await fetch('/api/data', { cache: 'no-store' });
       var j = await r.json();
-      if (j && j.updated_at) {
-        if (lastSeen && j.updated_at !== lastSeen) { location.reload(); return; }
-        lastSeen = j.updated_at;
+      if (j && j.data && Array.isArray(j.data) && j.data.length > 0) {
+        var local = null;
+        try { local = JSON.parse(localStorage.getItem(SK)); } catch(e){}
+        var localLen = local ? JSON.stringify(local).length : 0;
+        var dbLen = JSON.stringify(j.data).length;
+        // Use DB data if local is empty OR DB is bigger (more up-to-date)
+        if (!local || localLen < 100 || dbLen > localLen) {
+          localStorage.setItem(SK, JSON.stringify(j.data));
+          window.__vauDbTs = j.updated_at;
+          // Only reload if React already rendered stale data
+          if (document.querySelector('#root') && document.querySelector('#root').children.length > 0) {
+            location.reload();
+          }
+        }
       }
+    } catch(e){ console.warn('[VAU] DB load failed', e); }
+  })();
+
+  // 3. Intercept localStorage writes â POST to API (bridge React saves to DB)
+  var origSetItem = Storage.prototype.setItem;
+  var postTimer = null;
+  Storage.prototype.setItem = function(key, value) {
+    origSetItem.call(this, key, value);
+    if (key === SK && writeKey) {
+      clearTimeout(postTimer);
+      postTimer = setTimeout(function(){
+        try {
+          var parsed = JSON.parse(value);
+          if (!Array.isArray(parsed) || parsed.length === 0) return;
+          fetch('/api/data', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'x-write-key': writeKey },
+            body: JSON.stringify({ data: parsed })
+          }).then(function(r){
+            if (r.ok) { r.json().then(function(j){ window.__vauDbTs = j.updated_at; }); }
+            else { console.warn('[VAU] sync POST', r.status); }
+          }).catch(function(e){ console.warn('[VAU] sync failed', e); });
+        } catch(e){}
+      }, 1500);
+    }
+  };
+
+  // 4. Poll: reload if someone else saved newer data
+  var pollTimer2 = null;
+  async function poll() {
+    try {
+      var r = await fetch('/api/data', { cache: 'no-store' });
+      var j = await r.json();
+      if (j && j.updated_at && window.__vauDbTs && j.updated_at !== window.__vauDbTs) {
+        window.__vauDbTs = j.updated_at;
+        localStorage.setItem = origSetItem; // restore to avoid loop
+        localStorage.setItem(SK, JSON.stringify(j.data));
+        location.reload();
+      }
+      if (j && j.updated_at) window.__vauDbTs = j.updated_at;
     } catch(e){}
   }
-  setTimeout(check, 3000);
-  setInterval(check, 30000);
+  setTimeout(poll, 5000);
+  setInterval(poll, 30000);
   document.addEventListener('visibilitychange', function(){
-    if (document.visibilityState === 'visible') check();
+    if (document.visibilityState === 'visible') poll();
   });
 })();
 </script>`;
