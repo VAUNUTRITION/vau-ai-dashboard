@@ -9,7 +9,7 @@ const pool = new Pool({
   ssl: process.env.DATABASE_URL?.includes("railway") || process.env.DATABASE_URL?.includes("sslmode") ? { rejectUnauthorized: false } : undefined,
 });
 
-// Write key â set this in Railway Variables. Without a valid key, POST requests fail.
+// Write key - set this in Railway Variables. Without a valid key, POST requests fail.
 const WRITE_KEY = process.env.WRITE_KEY || "CHANGE_ME_IN_RAILWAY";
 
 const app = express();
@@ -41,17 +41,12 @@ async function getDashboardHtml() {
   const r = await fetch(RAW_URL, { cache: "no-store" });
   if (!r.ok) throw new Error("fetch_failed " + r.status);
   let html = await r.text();
-  // Inject Railway URL (self)
+  // Inject self URL as API_URL
   html = html.replace(
     'const API_URL = "";',
-    'const API_URL = "";\nwindow.__VAU_API_URL = window.location.origin;'
-  );
-  // Also overwrite the const via a wrapper trick â simplest: replace the empty string line
-  html = html.replace(
-    'const API_URL = "";\nwindow.__VAU_API_URL = window.location.origin;',
     'const API_URL = window.location.origin;'
   );
-  // Auto-inject: write key + API bridge (localStorageâDB sync) + live polling
+  // Auto-inject: write key + API bridge (localStorage<->DB sync) + live polling
   const autoKey = process.env.AUTO_WRITE_KEY || process.env.WRITE_KEY;
   const injectedScript = `
 <script>
@@ -60,10 +55,14 @@ async function getDashboardHtml() {
   var WK = 'vau_dash_write_key';
   var writeKey = ${autoKey ? JSON.stringify(autoKey) : 'null'};
 
-  // 1. Auto-grant write access
-  if (writeKey) try { localStorage.setItem(WK, writeKey); } catch(e){}
+  // 1. Capture original setItem BEFORE any overrides
+  var origSetItem = Storage.prototype.setItem;
 
-  // 2. On load: pull DB data into localStorage so React sees it
+  // 2. Auto-grant write access (use origSetItem to avoid triggering interceptor)
+  if (writeKey) try { origSetItem.call(localStorage, WK, writeKey); } catch(e){}
+
+  // 3. On load: pull DB data into localStorage so app sees it
+  //    Uses origSetItem to avoid triggering a POST back to DB (which would cause reload loop)
   (async function(){
     try {
       var r = await fetch('/api/data', { cache: 'no-store' });
@@ -73,12 +72,13 @@ async function getDashboardHtml() {
         try { local = JSON.parse(localStorage.getItem(SK)); } catch(e){}
         var localLen = local ? JSON.stringify(local).length : 0;
         var dbLen = JSON.stringify(j.data).length;
-        // Use DB data if local is empty OR DB is bigger (more up-to-date)
+        window.__vauDbTs = j.updated_at;
+        // Load DB data if local is empty/small OR DB has more data
         if (!local || localLen < 100 || dbLen > localLen) {
-          localStorage.setItem(SK, JSON.stringify(j.data));
-          window.__vauDbTs = j.updated_at;
-          // Only reload if React already rendered stale data
-          if (document.querySelector('#root') && document.querySelector('#root').children.length > 0) {
+          // Use origSetItem to bypass the POST interceptor - loading from DB should NOT trigger a save back
+          origSetItem.call(localStorage, SK, JSON.stringify(j.data));
+          // Only reload if the app already rendered with stale/empty data
+          if (document.querySelector('[data-vau-loaded]')) {
             location.reload();
           }
         }
@@ -86,8 +86,7 @@ async function getDashboardHtml() {
     } catch(e){ console.warn('[VAU] DB load failed', e); }
   })();
 
-  // 3. Intercept localStorage writes â POST to API (bridge React saves to DB)
-  var origSetItem = Storage.prototype.setItem;
+  // 4. Intercept localStorage writes -> POST to API (bridge app saves to DB)
   var postTimer = null;
   Storage.prototype.setItem = function(key, value) {
     origSetItem.call(this, key, value);
@@ -110,16 +109,14 @@ async function getDashboardHtml() {
     }
   };
 
-  // 4. Poll: reload if someone else saved newer data
-  var pollTimer2 = null;
+  // 5. Poll: reload if someone else saved newer data
   async function poll() {
     try {
       var r = await fetch('/api/data', { cache: 'no-store' });
       var j = await r.json();
       if (j && j.updated_at && window.__vauDbTs && j.updated_at !== window.__vauDbTs) {
         window.__vauDbTs = j.updated_at;
-        localStorage.setItem = origSetItem; // restore to avoid loop
-        localStorage.setItem(SK, JSON.stringify(j.data));
+        origSetItem.call(localStorage, SK, JSON.stringify(j.data));
         location.reload();
       }
       if (j && j.updated_at) window.__vauDbTs = j.updated_at;
