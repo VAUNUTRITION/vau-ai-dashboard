@@ -239,6 +239,13 @@ code{font-family:'Jost',monospace;background:var(--lime);padding:1px 6px;border-
 .actions .rec-text strong{color:var(--lime)}
 .actions .rec-num{background:var(--lime);color:var(--ink)}
 
+/* Source attribution tags */
+.src{display:inline-block;font-family:'Jost',sans-serif;font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:3px 8px;border-radius:999px;margin-left:6px;vertical-align:middle}
+.src-tt{background:rgba(98,191,189,.2);color:var(--teal)}
+.src-gt{background:rgba(30,26,52,.1);color:var(--ink)}
+.src-az{background:rgba(68,114,93,.18);color:var(--vau)}
+.src-az60{background:var(--lime);color:var(--ink)}
+
 footer{
   text-align:center;color:var(--ink-soft);font-size:11px;padding:28px 20px 8px;
   margin-top:24px;letter-spacing:.08em;text-transform:uppercase;font-weight:500;
@@ -252,18 +259,19 @@ footer span{font-family:'Caveat',cursive;text-transform:none;font-size:16px;lett
 <div class="header">
   <div class="wordmark">vau · nutrition</div>
   <h1>Sleep Supplements ICP <em>— market intelligence</em></h1>
-  <div class="subtitle">Google Trends (US · 12m) entrelazado con Fastmoss (TikTok Shop · 3.000 productos · 76 videos top) · Abril 2026.</div>
+  <div class="subtitle">Tres fuentes cruzadas: <b>Google Trends</b> (US · 12m) + <b>TikTok Shop via Fastmoss</b> (3.000 productos · 76 videos) + <b>Amazon US</b> (20 competidores + 8 directos $60–80) · Abril 2026.</div>
   <div class="tagline">a better day begins at night.</div>
 </div>
 
 <!-- HERO KPIs -->
+<p style="margin-bottom:10px;font-size:12px;color:var(--ink-soft);letter-spacing:.08em;text-transform:uppercase;font-weight:500"><span class="src src-tt">TikTok Shop · Fastmoss</span> Universo de 3.000 productos · Health &amp; Sleep · US</p>
 <div class="grid kpis" style="margin-bottom:20px">
-  <div class="kpi"><div class="label">Productos en el universo</div><div class="value" id="kpi-prods"></div><div class="sub">Health · Sleep · US</div></div>
+  <div class="kpi"><div class="label">Productos en el universo</div><div class="value" id="kpi-prods"></div><div class="sub">TikTok Shop · Health · Sleep · US</div></div>
   <div class="kpi"><div class="label">GMV total acumulado</div><div class="value" id="kpi-gmv"></div><div class="sub" id="kpi-gmv7"></div></div>
   <div class="kpi"><div class="label">Unidades vendidas</div><div class="value" id="kpi-units"></div><div class="sub">TikTok Shop · histórico</div></div>
-  <div class="kpi"><div class="label">Precio promedio USD</div><div class="value" id="kpi-price"></div><div class="sub">Mediana de categoría</div></div>
+  <div class="kpi"><div class="label">Precio promedio USD</div><div class="value" id="kpi-price"></div><div class="sub">Mediana TikTok Shop</div></div>
   <div class="kpi hot"><div class="label">Claim "Melatonin-Free"</div><div class="value" id="kpi-mf"></div><div class="sub" id="kpi-mf-gmv"></div></div>
-  <div class="kpi accent"><div class="label">Brands · stores únicas</div><div class="value" id="kpi-brands"></div><div class="sub">Mercado hiper-fragmentado</div></div>
+  <div class="kpi accent"><div class="label">Brands · stores únicas</div><div class="value" id="kpi-brands"></div><div class="sub">TikTok Shop · hiper-fragmentado</div></div>
 </div>
 
 <!-- HALLAZGOS CLAVE -->
@@ -271,30 +279,30 @@ footer span{font-family:'Caveat',cursive;text-transform:none;font-size:16px;lett
 <h2>Hallazgos clave <span class="badge hot">Top 3</span></h2>
 <div class="grid three-col">
   <div class="insight-box">
-    <h3>1 · El ritual gana al caramelo</h3>
+    <h3>1 · El ritual gana al caramelo <span class="src src-tt">TikTok Shop</span></h3>
     <p>226 powders generan <b>$48M GMV</b> frente a 811 gummies que hacen $20M. Cada powder mueve <b>2.4× más GMV</b> que cada gummy. Nello solo hace $43.7M con 8 SKUs.</p>
   </div>
   <div class="insight-box hot">
-    <h3>2 · "Melatonin-Free" es claim, no keyword</h3>
-    <p>0 búsquedas en Google Trends, pero <b>$13.9M GMV</b> validados en Fastmoss. LullaBites vende $11.7M con ese único USP. Úsalo en packaging y hook de video — no en SEO.</p>
+    <h3>2 · "Melatonin-Free" es claim, no keyword <span class="src src-gt">Trends</span> <span class="src src-tt">TikTok</span></h3>
+    <p>0 búsquedas en Google Trends, pero <b>$13.9M GMV</b> validados en TikTok Shop (Fastmoss). LullaBites vende $11.7M con ese único USP. Úsalo en packaging y hook de video — no en SEO.</p>
   </div>
   <div class="insight-box accent">
-    <h3>3 · Un stack que el cuerpo recuerda</h3>
-    <p><b>Mg glycinate + Ashwagandha KSM-66 + L-Theanine.</b> Los top 3 productos del mercado lo comparten. Rising queries en Google Trends: glycinate +120%, glycine +160%, l-theanine +100%.</p>
+    <h3>3 · Un stack que el cuerpo recuerda <span class="src src-tt">TikTok</span> <span class="src src-gt">Trends</span></h3>
+    <p><b>Mg glycinate + Ashwagandha KSM-66 + L-Theanine.</b> Los top 3 productos de TikTok Shop lo comparten. Rising queries en Google Trends: glycinate +120%, glycine +160%, l-theanine +100%.</p>
   </div>
 </div>
 </div>
 
 <!-- GOOGLE TRENDS CHART -->
 <div class="section">
-<h2>Demanda de búsqueda <span class="badge">SEO signal · Google Trends · US · 12m</span></h2>
+<h2>Demanda de búsqueda <span class="src src-gt">Google Trends</span> <span class="badge">SEO signal · US · 12m</span></h2>
 <div class="chart-container tall"><canvas id="chart-trends"></canvas></div>
 <p class="micro">Índice relativo 0–100. "sleep powder" en <b>breakout (+389%)</b>. "magnesium for sleep" líder absoluto de volumen. "melatonin alternative" y "melatonin-free" sin volumen como keyword — viven mejor como USP que como search intent.</p>
 </div>
 
 <!-- CROSS ANALYSIS -->
 <div class="section dashed">
-<h2>Cross-analysis: Trends × Fastmoss <span class="badge ok">Veredicto</span></h2>
+<h2>Cross-analysis <span class="src src-gt">Google Trends</span> <span class="src src-tt">TikTok Shop</span> <span class="badge ok">Veredicto</span></h2>
 <table>
   <thead><tr><th>Keyword · Ángulo</th><th>Trends idx</th><th>Trend 12m</th><th>Fastmoss productos</th><th>Fastmoss GMV</th><th>Top brand</th><th>Veredicto</th></tr></thead>
   <tbody id="cross-tbody"></tbody>
@@ -304,12 +312,12 @@ footer span{font-family:'Caveat',cursive;text-transform:none;font-size:16px;lett
 <!-- FASTMOSS LANDSCAPE -->
 <div class="grid two-col">
   <div class="section">
-    <h2>GMV por formato <span class="badge ok">Product strategy</span></h2>
+    <h2>GMV por formato <span class="src src-tt">TikTok Shop</span> <span class="badge ok">Product strategy</span></h2>
     <div class="chart-container"><canvas id="chart-formats"></canvas></div>
     <p class="micro">Powder/Mix tiene menos productos pero mayor GMV agregado y <b>mayor GMV por producto</b>. Formato con barrera de entrada más alta → mejor defensibilidad.</p>
   </div>
   <div class="section">
-    <h2>Top 10 brands por GMV <span class="badge">Competition</span></h2>
+    <h2>Top 10 brands por GMV <span class="src src-tt">TikTok Shop</span> <span class="badge">Competition</span></h2>
     <div class="chart-container"><canvas id="chart-brands"></canvas></div>
     <p class="micro">Nello domina con $43.7M. LullaBites #2 con un solo SKU ($11.7M). El resto del mercado es <code>10×</code> más pequeño.</p>
   </div>
@@ -317,14 +325,14 @@ footer span{font-family:'Caveat',cursive;text-transform:none;font-size:16px;lett
 
 <!-- INGREDIENT STACKS -->
 <div class="section">
-<h2>Performance por ingrediente <span class="badge lime">Formulation</span></h2>
+<h2>Performance por ingrediente <span class="src src-tt">TikTok Shop</span> <span class="badge lime">Formulation</span></h2>
 <div class="chart-container"><canvas id="chart-ingredients"></canvas></div>
-<p class="micro">Barras teal = # productos (competencia). Línea lima = GMV por producto (eficiencia). Los ingredientes <b>arriba a la derecha</b> — alta eficiencia y no saturados — son las mejores apuestas: Melatonin-Free, Ashwagandha, L-Theanine.</p>
+<p class="micro">Datos: TikTok Shop via Fastmoss (3.000 productos). Barras teal = # productos (competencia). Línea lima = GMV por producto (eficiencia). Los ingredientes <b>arriba a la derecha</b> — alta eficiencia y no saturados — son las mejores apuestas: Melatonin-Free, Ashwagandha, L-Theanine.</p>
 </div>
 
 <!-- TOP PRODUCTS -->
 <div class="section">
-<h2>Top 10 productos del mercado <span class="badge">Benchmarks</span></h2>
+<h2>Top 10 productos <span class="src src-tt">TikTok Shop</span> <span class="badge">Benchmarks · por GMV</span></h2>
 <table>
   <thead><tr><th style="width:5%">#</th><th style="width:38%">Producto</th><th>Brand</th><th>Precio</th><th>Formato</th><th>Stack</th><th>GMV total</th><th>Unidades</th><th>GMV 7d</th></tr></thead>
   <tbody id="top-tbody"></tbody>
@@ -334,12 +342,12 @@ footer span{font-family:'Caveat',cursive;text-transform:none;font-size:16px;lett
 <!-- CREATIVE INTEL -->
 <div class="grid two-col">
   <div class="section">
-    <h2>Creative hooks ganadores <span class="badge hot">TikTok</span></h2>
+    <h2>Creative hooks ganadores <span class="src src-tt">TikTok Shop</span> <span class="badge hot">Videos con GMV</span></h2>
     <div id="hooks-container"></div>
     <p class="micro" id="video-stats"></p>
   </div>
   <div class="section">
-    <h2>Top hashtags <span class="badge">Creator brief</span></h2>
+    <h2>Top hashtags <span class="src src-tt">TikTok Shop</span> <span class="badge">Creator brief</span></h2>
     <div id="hashtag-cloud" style="line-height:2.8"></div>
     <p class="micro">Hashtags más frecuentes en los 76 videos con GMV confirmado. Core rotation: <b>#sleep · #magnesium · #cortisol · #insomnia · #fallasleepfast</b>. Evita hashtags de competidores (#lovewellness, #goli, #innerbrightness).</p>
   </div>
@@ -349,8 +357,8 @@ footer span{font-family:'Caveat',cursive;text-transform:none;font-size:16px;lett
 
 <!-- DIRECT PRICE COMPETITORS — HEAD TO HEAD -->
 <div class="section" style="border:2px solid var(--vau);background:linear-gradient(135deg,var(--paper),var(--cream-soft))">
-<h2>Competidores directos · $60–80 <span class="badge hot">Head-to-head</span></h2>
-<p class="micro" style="margin:-10px 0 18px;font-size:13px">Marcas contra las que REST FIRST competirá en shelf y search results. Mismo rango de precio, misma audiencia.</p>
+<h2>Competidores directos · $60–80 <span class="src src-az60">Amazon · Directos</span> <span class="badge hot">Head-to-head · 8 marcas</span></h2>
+<p class="micro" style="margin:-10px 0 18px;font-size:13px">Fuente: Amazon US · Abril 2026. Marcas contra las que REST FIRST competirá head-to-head en shelf y search results. Mismo rango de precio ($60–80), misma audiencia.</p>
 <table>
   <thead><tr><th style="width:3%">#</th><th style="width:14%">Brand</th><th>Precio</th><th>$/Serv</th><th>Rating</th><th>Reviews</th><th>Ingredientes clave</th><th>Formato</th><th style="width:20%">Vulnerabilidades vs REST FIRST</th></tr></thead>
   <tbody id="direct-tbody"></tbody>
@@ -359,7 +367,7 @@ footer span{font-family:'Caveat',cursive;text-transform:none;font-size:16px;lett
 
 <!-- STRATEGIC POSITIONING MAP -->
 <div class="section dashed">
-<h2>Mapa de posicionamiento estratégico <span class="badge ok">$60–80 tier</span></h2>
+<h2>Mapa de posicionamiento estratégico <span class="src src-az60">Amazon · Directos</span> <span class="badge ok">$60–80 tier</span></h2>
 <div class="grid three-col">
   <div class="insight-box">
     <h3>Precio validado</h3>
@@ -397,7 +405,7 @@ footer span{font-family:'Caveat',cursive;text-transform:none;font-size:16px;lett
 </div>
 
 <div class="section">
-<h2>Amazon Competitive Landscape <span class="badge">Amazon US · 20 competitors</span></h2>
+<h2>Amazon Competitive Landscape <span class="src src-az">Amazon US</span> <span class="badge">Mercado amplio · 20 competidores</span></h2>
 <table>
   <thead><tr><th style="width:3%">#</th><th style="width:15%">Brand/Product</th><th>Tier</th><th>Format</th><th>Price</th><th>Rating</th><th>Core Ingredients</th><th>Positioning</th></tr></thead>
   <tbody id="amazon-tbody"></tbody>
@@ -406,14 +414,14 @@ footer span{font-family:'Caveat',cursive;text-transform:none;font-size:16px;lett
 
 <!-- INGREDIENT MATRIX -->
 <div class="section">
-<h2>Ingredient Matrix <span class="badge">Formulation</span><span class="badge lime">Competitive</span></h2>
+<h2>Ingredient Matrix <span class="src src-az">Amazon US</span> <span class="badge lime">20 competidores</span></h2>
 <div class="chart-container"><canvas id="chart-amazon-ingredients"></canvas></div>
-<p class="micro"><b>Melatonin saturación máxima (12/20).</b> Apigenin es white space — solo 2/20 competidores lo usan (Momentous, Beam). Oportunidad de first-mover para REST FIRST.</p>
+<p class="micro">Fuente: Amazon US, 20 competidores top. <b>Melatonin saturación máxima (12/20).</b> Apigenin es white space — solo 2/20 competidores lo usan (Momentous, Beam). Oportunidad de first-mover para REST FIRST.</p>
 </div>
 
 <!-- VOICE OF CUSTOMER -->
 <div class="section">
-<h2>Voice of Customer — Review Intelligence <span class="badge hot">15 brands · 265K+ reviews</span></h2>
+<h2>Voice of Customer — Review Intelligence <span class="src src-az">Amazon</span> <span class="badge hot">15 brands · 265K+ reviews</span></h2>
 <div class="grid two-col">
   <div>
     <h3 style="font-family:'Capriola',serif;font-size:16px;margin-bottom:14px;color:var(--ink)">Top Pain Points</h3>
@@ -428,7 +436,7 @@ footer span{font-family:'Caveat',cursive;text-transform:none;font-size:16px;lett
 
 <!-- MARKET TIERS -->
 <div class="section dashed">
-<h2>Market Tiers y gaps <span class="badge ok">Oportunidad</span></h2>
+<h2>Market Tiers y gaps <span class="src src-az">Amazon US</span> <span class="badge ok">Oportunidad</span></h2>
 <table>
   <thead><tr><th>Tier</th><th>Price Range</th><th># Brands</th><th>Key Players</th><th>Gaps/Weaknesses</th></tr></thead>
   <tbody id="tiers-tbody"></tbody>
@@ -441,14 +449,14 @@ footer span{font-family:'Caveat',cursive;text-transform:none;font-size:16px;lett
 
 <!-- COMPETITIVE CLAIMS -->
 <div class="section">
-<h2>Claims que usan los competidores <span class="badge">Messaging</span></h2>
+<h2>Claims que usan los competidores <span class="src src-az">Amazon US</span> <span class="badge">Messaging · 20 competidores</span></h2>
 <div class="chart-container"><canvas id="chart-claims"></canvas></div>
 <p class="micro"><b>'No next-day grogginess' es el claim con mayor upside — solo 8/20 lo usan pero es el dolor #1 en reviews.</b> 'Stress / cortisol support' en crecimiento post Expo West 2026.</p>
 </div>
 
 <!-- RECOMENDACIONES -->
 <div class="actions">
-<h2>Key Takeaways <span class="badge lime">Amazon Insights</span></h2>
+<h2>Key Takeaways <span class="src src-az">Amazon</span> <span class="src src-az60">Directos $60–80</span> <span class="badge lime">Insights</span></h2>
 <div class="rec-grid">
   <div class="rec-num">1</div><div class="rec-text"><strong>APIGENIN = WHITE SPACE</strong> — Solo 2/20 marcas lo incluyen (Momentous, Beam). Awareness alta (Huberman) pero oferta baja. First-mover advantage para REST FIRST.</div>
   <div class="rec-num">2</div><div class="rec-text"><strong>PREMIUM GAP</strong> — El tier $60–80 no tiene marca que combine calidad clínica con branding DTC aspiracional gender-neutral. Momentous es clínico pero "seco"; Beam tiene ritual pero polariza; Jocko es hyper-masculino.</div>
@@ -457,7 +465,7 @@ footer span{font-family:'Caveat',cursive;text-transform:none;font-size:16px;lett
   <div class="rec-num">5</div><div class="rec-text"><strong>TRUST SIGNALS</strong> — Third-party testing, NSF, dosificación transparente y "made in USA" justifican precio premium en reviews de Amazon.</div>
 </div>
 
-<h2 style="margin-top:28px;color:var(--cream);position:relative">Recomendaciones de portfolio para VAU <span class="badge lime">Action</span></h2>
+<h2 style="margin-top:28px;color:var(--cream);position:relative">Recomendaciones de portfolio para VAU <span class="src src-tt">TikTok</span> <span class="src src-gt">Trends</span> <span class="src src-az">Amazon</span> <span class="badge lime">Action</span></h2>
 <div class="rec-grid">
   <div class="rec-num">1</div><div class="rec-text"><strong>Formato principal</strong> — powder · drink-mix stick pack. Benchmarks: Nello, MoonBrew, Yesnap. Mayor GMV/producto y breakout en Google Trends.</div>
   <div class="rec-num">2</div><div class="rec-text"><strong>Stack core</strong> — Mg glycinate + Ashwagandha KSM-66 + L-Theanine. Validado por los 3 top sellers. GABA como cuarto ingrediente premium opcional.</div>
