@@ -56,7 +56,7 @@ async function getDashboardHtml() {
   const injectedScript = `
 <script>
 (function(){
-  var SK = 'vau_dash_v8';
+  var SK = 'vau_dash_v7';
   var WK = 'vau_dash_write_key';
   var writeKey = ${autoKey ? JSON.stringify(autoKey) : 'null'};
 
